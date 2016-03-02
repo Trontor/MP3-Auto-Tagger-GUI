@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -9,12 +7,12 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using Awesomium.Core;
 using HtmlAgilityPack;
 using MetroFramework.Forms;
 using MP3_Auto_Tagger_GUI.Properties;
@@ -30,7 +28,6 @@ namespace MP3_Auto_Tagger_GUI
         private const int SwHide = 0;
         private const int SwShow = 5;
         private bool formShown = false;
-
         private bool _windowHidden;
         public ContextMenu Menu;
         public NotifyIcon NotificationIcon;
@@ -41,9 +38,11 @@ namespace MP3_Auto_Tagger_GUI
         private int _tableWidth = 77;
 
         private int _processedArtwork;
+
         public Form1()
         {
             InitializeComponent();
+            ChangeMonitorPath(_path);
         }
 
         enum Status
@@ -55,7 +54,7 @@ namespace MP3_Auto_Tagger_GUI
 
         private void SetStatus(string status, Status statusType = Status.Normal)
         {
-            Color clr = Color.Blue;
+            Color clr = Color.PapayaWhip;
             switch (statusType)
             {
                 case Status.Bad:
@@ -65,13 +64,14 @@ namespace MP3_Auto_Tagger_GUI
                     clr = Color.Green;
                     break;
             }
+            Console(clr, status);
             lbl_FileStatus.Text = status;
             lbl_FileStatus.ForeColor = clr;
         }
         private void SetSubstatus(string status, Status statusType = Status.Normal)
         {
             lblSubstatus.Visible = true;
-            Color clr = Color.Blue;
+            Color clr = Color.PapayaWhip;
             switch (statusType)
             {
                 case Status.Bad:
@@ -382,95 +382,127 @@ namespace MP3_Auto_Tagger_GUI
         private void ScanAriaCharts()
         {
             string siteUrl = "http://www.ariacharts.com.au/Charts/Singles-Chart";
-            using (var client = new WebClient()) // WebClient class inherits IDisposable
+            WebView ariaView = WebCore.CreateWebView(1024, 768, WebViewType.Offscreen);
+            ariaView.Source = new Uri(siteUrl);
+            ariaView.LoadingFrameComplete += (s, e) =>
             {
-                client.Headers.Add("user-agent", "Mozilla/5.0 (MeeGo; NokiaN9) AppleWebKit/534.13 (KHTML, like Gecko) NokiaBrowser/8.5.0 Mobile Safari/534.13");
-                string htmlCode = client.DownloadString(siteUrl);
-                var doc = new HtmlDocument();
-                doc.LoadHtml(htmlCode);
-                string site_XPath = "//*[@id=\"dvChartItems\"]";
-                var node = doc.DocumentNode.SelectSingleNode(site_XPath);
-                for (var index = 0; index < node.ChildNodes.Count; index++)
+                if (e.IsMainFrame)
                 {
-                    var item_Row = doc.DocumentNode.SelectSingleNode(site_XPath).ChildNodes[index];
-                    foreach (var nodes in item_Row.ChildNodes)
-                    {
-                        if (nodes.Attributes["class"].Value.Contains("title-artist"))
-                        {
-                            Console.WriteLine(nodes.ChildNodes[0].InnerText);
-                        }
+                    var
+                        doc = new HtmlDocument();
 
+                    doc.LoadHtml(ariaView.HTML);
+                    string site_XPath = "//*[@id=\"dvChartItems\"]";
+                    var node = doc.DocumentNode.SelectSingleNode(site_XPath);
+                    for (var index = 0; index < node.ChildNodes.Count; index++)
+                    {
+                        var item_Row = doc.DocumentNode.SelectSingleNode(site_XPath).ChildNodes[index];
+                        foreach (var nodes in item_Row.ChildNodes)
+                        {
+                            if (nodes.Attributes["class"].Value.Contains("title-artist"))
+                            {
+                                System.Console.WriteLine(HttpUtility.HtmlDecode(nodes.ChildNodes[1].InnerText + " - " + nodes.ChildNodes[0].InnerText));
+                            }
+                        }
                     }
                 }
-            }
+            };
         }
 
         private void AnalyseAllFiles()
         {
-            Invoke(new Action(() => SetStatus("Analysing music files...")));
-            Dictionary<string, string> changedFiles = new Dictionary<string, string>();
-            Invoke(new Action(() => SetStatus("Processing song names...")));
-            _filter = false;
-            if (_filter)
-                _path = Path.Combine(@"D:\Music - Copy", "filter");
-            _files = Directory.GetFiles(_path, "*.mp3", SearchOption.TopDirectoryOnly);
-
-            foreach (string filePath in _files)
+            new Thread(() =>
             {
-                Invoke(new Action(() => SetSubstatus(Path.GetFileNameWithoutExtension(filePath))));
-                if (!filePath.Contains(".ini"))
-                    using (var file = File.Create(filePath))
-                    {
-                        if (!file.Tag.Pictures.Any())
+                Invoke(new Action(() => SetStatus("Analysing music files...")));
+                Dictionary<string, string> changedFiles = new Dictionary<string, string>();
+                Invoke(new Action(() =>
+                {
+                    SetStatus("Processing song names...");
+                    metroProgressSpinner1.Value = 0;
+                    metroProgressSpinner1.Visible = true;
+                    lbl_Percentage.Text = "0";
+                    lbl_Percentage.Visible = true;
+
+                    pnlOutcome.Visible = false;
+                    pnlProcess.Visible = true;
+                    panelControls.Visible = false;
+                }));
+                _filter = false;
+                if (_filter)
+                    ChangeMonitorPath(Path.Combine(@"D:\Music - Copy", "filter"));
+                _files = Directory.GetFiles(_path, "*.mp3", SearchOption.TopDirectoryOnly);
+
+                foreach (string filePath in _files)
+                {
+                    Invoke(new Action(() => SetSubstatus(Path.GetFileNameWithoutExtension(filePath))));
+                    if (!filePath.Contains(".ini"))
+                        using (var file = File.Create(filePath))
                         {
-                            new Thread(() =>
+                            if (!file.Tag.Pictures.Any())
                             {
-                                try
+                                new Thread(() =>
                                 {
-                                    Do(() => ProcessArtwork(filePath), TimeSpan.FromSeconds(2));
-                                }
-                                catch
-                                {
-                                    // ignored
-                                }
-                            }).Start();
-                            Thread.Sleep(1000);
+                                    try
+                                    {
+                                        Do(() => ProcessArtwork(filePath), TimeSpan.FromSeconds(2));
+                                    }
+                                    catch
+                                    {
+                                        // ignored
+                                    }
+                                }).Start();
+                                Thread.Sleep(1000);
+                            }
+                        }
+                    //string lyrics = RetreiveLyrics(filePath);
+                    //if (lyrics != "")
+                    //{
+                    //    Console.WriteLine(filePath);
+                    //    Console.Write(lyrics);
+                    //    Console.ReadKey();
+                    //}
+                    string fixedFileName = FixFile(filePath);
+                    if (fixedFileName != Path.GetFileNameWithoutExtension(filePath))
+                    {
+                        changedFiles.Add(Path.GetFileNameWithoutExtension(filePath), fixedFileName);
+                    }
+                    int fileIndex = Array.IndexOf(_files, filePath) + 1;
+                    int fileAmount = _files.Count();
+                    float percentage = ((float)fileIndex / (float)fileAmount) * 100;
+                    System.Console.WriteLine(percentage);
+                    Invoke(new Action(() =>
+                    {
+                        metroProgressSpinner1.Value = (int)Math.Ceiling(percentage);
+                        lbl_Percentage.Text = Math.Ceiling(percentage).ToString();
+                    }));
+                }
+                Invoke(new Action(() =>
+                {
+                    lblResults.Text = "";
+                    if (changedFiles.Any())
+                    {
+                        lblResults.Text += "The following names have been changed:";
+                        foreach (var s in changedFiles)
+                        {
+                            lblResults.Text += Environment.NewLine + "Old: " + Path.GetFileNameWithoutExtension(s.Key) + ", ";
+
+                            lblResults.Text += Environment.NewLine + "New: " + s.Value;
                         }
                     }
-                //string lyrics = RetreiveLyrics(filePath);
-                //if (lyrics != "")
-                //{
-                //    Console.WriteLine(filePath);
-                //    Console.Write(lyrics);
-                //    Console.ReadKey();
-                //}
-                string fixedFileName = FixFile(filePath);
-                if (fixedFileName != Path.GetFileNameWithoutExtension(filePath))
-                {
-                    changedFiles.Add(Path.GetFileNameWithoutExtension(filePath), fixedFileName);
-                }
-                int fileIndex = Array.IndexOf(_files, filePath) + 1;
-                int fileAmount = _files.Count();
-                float percentage = ((float)fileIndex / (float)fileAmount) * 100;
-                 Invoke(new Action(() =>
-            }
-            Space();
-            ColoredConsoleWrite(ConsoleColor.Yellow, "Finished Processing Song Names.");
-            if (changedFiles.Any())
-            {
-                ColoredConsoleWrite(ConsoleColor.Magenta, "The following names have been changed:");
-                foreach (var s in changedFiles)
-                {
-                    ColoredConsoleWrite(ConsoleColor.DarkGreen, "Old: " + Path.GetFileNameWithoutExtension(s.Key) + ", ", true);
-
-                    ColoredConsoleWrite(ConsoleColor.Green, "New: " + s.Value);
-                }
-            }
-            else
-            {
-                ColoredConsoleWrite(ConsoleColor.Green, "No names changes have been made.");
-            }
-            Invoke(new Action(() => SetSubstatus(_files.Length + " processed succesfully.", Status.Good)));
+                    else
+                    {
+                        lblResults.Text += "No names changes have been made.";
+                    }
+                    SetStatus("Finished processing your music files", Status.Good);
+                    SetSubstatus(_files.Length + " song files processed succesfully.", Status.Good);
+                    lbl_Percentage.Visible = false;
+                    metroProgressSpinner1.Visible = false;
+                    pnlProcess.Visible = false;
+                    panelControls.Visible = true;
+                    pnlOutcome.Visible = true;
+                    focusMe.Focus();
+                }));
+            }).Start();
         }
 
         private bool ProcessArtwork(string filename, bool showdiag = false)
@@ -507,32 +539,27 @@ namespace MP3_Auto_Tagger_GUI
 
         private void NotificationIcon_Click(object sender, EventArgs e)
         {
-            if (_windowHidden)
-            {
-                _windowHidden = false;
-                this.WindowState = FormWindowState.Normal;
-            }
-            else
-            {
-                _windowHidden = true;
-                this.WindowState = FormWindowState.Minimized;
-            }
+            Invoke(new Action(() => WindowState = FormWindowState.Normal));
         }
 
         public void Space()
         {
-            Console.WriteLine("");
+            System.Console.WriteLine("");
         }
 
-        public void ColoredConsoleWrite(ConsoleColor color, string text, bool writeOnly = false)
+        public static void AppendText(RichTextBox box, string text, Color color)
         {
-            var originalColor = Console.ForegroundColor;
-            Console.ForegroundColor = color;
-            if (writeOnly)
-                Console.Write(text);
-            else
-                Console.WriteLine(text);
-            Console.ForegroundColor = originalColor;
+            box.SelectionStart = box.TextLength;
+            box.SelectionLength = 0;
+
+            box.SelectionColor = color;
+            box.AppendText(text);
+            box.SelectionColor = box.ForeColor;
+        }
+
+        public void Console(Color color, string text, bool newline = true)
+        {
+            AppendText(logBox, text + (newline ? Environment.NewLine : ""), color);
         }
 
         private void mnuExit_Click(object sender, EventArgs e)
@@ -565,7 +592,7 @@ namespace MP3_Auto_Tagger_GUI
                 row += AlignCentre(column, width) + "|";
             }
 
-            Console.WriteLine(row);
+            System.Console.WriteLine(row);
         }
 
         private string AlignCentre(string text, int width)
@@ -594,7 +621,7 @@ namespace MP3_Auto_Tagger_GUI
                     }
                     if (titles.Contains(file.Tag.Title))
                     {
-                        ColoredConsoleWrite(ConsoleColor.Yellow, "Duplicate Title:" + filePath);
+                        Console(Color.Yellow, "Duplicate Title:" + filePath);
                     }
                     else
                         titles.Add(file.Tag.Title);
@@ -649,18 +676,31 @@ namespace MP3_Auto_Tagger_GUI
             {
                 _files = Directory.GetFiles(_path, "*.mp3", SearchOption.TopDirectoryOnly);
                 string fixedFile = FixFile(e.FullPath);
+                Invoke(new Action(() =>
+                {
+                    lblMonitorStatus.Text = "File Change Detected. See Process Log for details";
+                }));
+
+                new Thread(() =>
+                {
+                    Thread.Sleep(5000);
+                    Invoke(new Action(() =>
+                    {
+                        lblMonitorStatus.Text = "Waiting for file changes...";
+                    }));
+                }).Start();
                 string oldFile = Path.GetFileNameWithoutExtension(e.FullPath);
                 if (oldFile != fixedFile)
                 {
-                    ColoredConsoleWrite(ConsoleColor.Magenta, "The following files has been detected and modified:");
-                    ColoredConsoleWrite(ConsoleColor.DarkGreen, "Old: " + oldFile + ", ", true);
-                    ColoredConsoleWrite(ConsoleColor.Green, "New: " + fixedFile);
+                    Console(Color.Magenta, "The following files has been detected and modified:");
+                    Console(Color.DarkGreen, "Old: " + oldFile + ", ", true);
+                    Console(Color.Green, "New: " + fixedFile);
                     Space();
                 }
                 if (ProcessArtwork(e.FullPath, true))
                 {
-                    ColoredConsoleWrite(ConsoleColor.Magenta, "The following file artwork has been detected and modified:");
-                    ColoredConsoleWrite(ConsoleColor.Green, "File name: " + fixedFile);
+                    Console(Color.Magenta, "The following file artwork has been detected and modified:");
+                    Console(Color.Green, "File name: " + fixedFile);
                     Space();
                 }
             }
@@ -691,43 +731,78 @@ namespace MP3_Auto_Tagger_GUI
             return str_Input;
         }
 
+        private void ChangeMonitorPath(string pathdir)
+        {
+            _path = pathdir;
+            lblMonitoringDirectory.Text = pathdir;
+        }
+
+
         private void logInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
             {
-                logBox.AppendText(Environment.NewLine + "Command Run: " + logInput.Text.Trim());
-                str_Input = logInput.Text.Trim();
-                getInput = true;
-                logInput.WaterMarkColor = Color.White;
-                logInput.Text = "";
+                RunConsoleCommand(logInput.Text);
             }
+        }
+
+        private void RunConsoleCommand(string command)
+        {
+            Dictionary<string, string> commandList = new Dictionary<string, string>();
+
+            commandList.Add("filter", "Changes the file monitoring/analysis path to your filter path.");
+            commandList.Add("regular", "Changes the file monitoring/analysis path back to normal.");
+            commandList.Add("analyse", "Analyses all files in the set monitoring path.");
+            commandList.Add("dump artwork", "Dumps artwork into a SPECIFIED DIRECTORY");
+            commandList.Add("help", "I don't know man");
+
+            switch (command)
+            {
+                case "filter":
+                    _filter = true;
+                    ChangeMonitorPath(@"D:\Music - Copy");
+                    Console(Color.PapayaWhip, "Filter has been enabled.");
+                    break;
+                case "regular":
+                    _filter = false;
+                    ChangeMonitorPath(@"D:\Music");
+                    Console(Color.PapayaWhip, "Filter has been disabled.");
+                    break;
+                case "analyse":
+                    AnalyseAllFiles();
+                    break;
+                case "dump artwork":
+                    DumpArtwork();
+                    break;
+                case "help":
+                    Console(Color.Green, "Here's a list of available commands:");
+                    foreach (var s in commandList)
+                    {
+                        Console(Color.PaleVioletRed, s.Key, false);
+
+                        Console(Color.White, " : " + s.Value);
+                    }
+                    break;
+                default:
+                    Console(Color.Red, "Command: " + logInput.Text + " not recognised :^(");
+                    Console(Color.PapayaWhip, "Type 'help' for a command list.");
+                    break;
+            }
+            str_Input = logInput.Text.Trim();
+            getInput = true;
+            logInput.WaterMarkColor = Color.White;
+            logInput.Text = "";
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
-        }
-
-        private void lblSubstatus_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_Shown(object sender, EventArgs e)
-        {
-            timer1.Enabled = true;
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-
+            this.WindowState = FormWindowState.Minimized;
             SetStatus("Initialising Application");
             if (_filter)
-                _path = @"D:\Music - Copy";
-            //    this.WindowState = FormWindowState.Minimized;
-            //  _windowHidden = true;
+                ChangeMonitorPath(@"D:\Music - Copy");
+            _windowHidden = true;
             var notifyThread = new Thread(
-                delegate()
+                delegate ()
                 {
                     Menu = new ContextMenu();
 
@@ -754,12 +829,62 @@ namespace MP3_Auto_Tagger_GUI
             monitor.Created += monitor_CreatedOrChanged;
             monitor.Renamed += monitor_CreatedOrChanged;
             SetStatus("Preparing music file analysis");
-            new Thread(() =>
+            AnalyseAllFiles();
+            ScanAriaCharts();
+            timer1.Enabled = true;
+            RunConsoleCommand("help");
+        }
+
+        private void btn_RescanAll_Click(object sender, EventArgs e)
+        {
+            AnalyseAllFiles();
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
             {
-                AnalyseAllFiles();
-            }).Start();
-         //   ScanAriaCharts();
+                this.ShowInTaskbar = false;
+            }
+            else this.ShowInTaskbar = true;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
             timer1.Enabled = false;
+
+        }
+
+        private void metroTabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl.SelectedTab.Text == "Process Log")
+            {
+                logInput.Focus();
+            }
+            else if (tabControl.SelectedTab.Text == "Status")
+            {
+                pnlOutcome.Visible = false;
+
+                pnlOutcome.Visible = true;
+            }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                this.WindowState = FormWindowState.Minimized;
+                e.Cancel = true;
+            }
+        }
+
+        private void tabControl_TabIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void Awesomium_Windows_Forms_WebControl_LoadingFrameComplete(object sender, FrameEventArgs e)
+        {
+            MessageBox.Show("Test");
         }
     }
 }

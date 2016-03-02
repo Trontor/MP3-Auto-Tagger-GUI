@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using HtmlAgilityPack;
 using MetroFramework.Controls;
-using TagLib;
 using File = System.IO.File;
 
 namespace MP3_Auto_Tagger_GUI
@@ -26,21 +22,26 @@ namespace MP3_Auto_Tagger_GUI
         public string FilePath { get; set; }
         public string FileName { get; set; }
         public string BaseArtist { get; set; }
+
         private string Start
         {
             get { return PartOfFileName(FileName, true); }
         }
+
         private string End
         {
             get { return PartOfFileName(FileName, false); }
         }
 
         private static RichTextBox main_LogBox = null;
+
         private static MetroTextBox main_InputBox = null;
+
         public TrontorMP3File(string filePath)
         {
             FilePath = filePath;
         }
+
         public static void Space()
         {
             Console.WriteLine("");
