@@ -117,11 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="mp3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\mp34.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btn_Reorder.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
+        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJ
+        TUUH4AMECBY1Vmp86QAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAACeSURBVDhP
+        7YyxDYNAEASRA0cU5oiMgJcLIfwSIHAzRJaogQjcAB04Ov9aLH9v7guwRDDB3e5OISJZ+lfTAisj5pP0
+        i3sCKyPmk5yCvxN48Rc/1VcdWgJ00OWtys0tlN/dfK/iLxUgQwdd/nbBY6rLEI5aogVx7EZ0udsF4FeC
+        MciNQSIAWhJYN8wxSA6iJLJhjsHhQb6S2Q0gNxaR4gMAGdE/qbntAAAAAABJRU5ErkJggg==
+</value>
   </data>
-  <data name="question_sign_on_person_head" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\question-sign-on-person-head.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="btn_LoadVideo.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
+        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAB3RJTUUH4AMEBzsPuxC4iQAAAc9JREFU
+        WEftlrtKA0EUhg+CFmKhjVopBLySpLHxAQSfQESttTMpbXyH6AuoL2EXS0UwIiheYxKxEARvoNFESOJ/
+        1lnYHHY2s4lumj3wMbNzrrMzOzsUSigmckqxvnOaHLqhkYgJbMs+yt1Mrmk0fkVjGyCN/jHaHNoXtLVW
+        UDHyKibH3gRxlfZXLml8AYPfTsf/ROVatJKfUXQAD59Og4D4wlINEjqrQhEkSV77HRdFICD3Nhdw4KbU
+        8AR2xVjTcG5egoJUeJDnfXNBE9Po7wldM+T5Dfj51KwCbMHzLDhy6H3BubmADzelhroCbMHhMwPdibBt
+        CHK/8yzKUuGBawEsNaIO6OcQNCt8vChxARUx6IW2AFsyNNUJu3Xhp6PypwXgYOnBG1iD3Zvw02EV0PIS
+        YNbd0CXBo8PWhBJvwqKLQkddAZhxF/4jK4jx4GLbEHsTvkqFB1YBvM5wXsbzvdD7AjGeuQDjgwgOd2iX
+        0PrZ6V7ccgGHYjAwMJH9dv+MtvgNJKQiQBJtu5Bg9sUcRfqtz4mvZBj0cx60ShkFzFvJbcFgDKSAvJRW
+        gVsQE6oqBsfKoE2DFCYcVWnNpEDDvbxU8vqtg23ZR7mHEoqHEP0AC1QRfOd3v/cAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="btn_ClearSong.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
+        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAB3RJTUUH4AMEBxIIYTKywQAAAv1JREFU
+        WEe1l8mKFEEQhkNBPagn94OoNxfwARRczoIguOtZdDqzZkAddUDGUS9eRcflDQQVfQFX1NFnGFxu4yjT
+        mVU90I5iGxEZXUtXdXct7QdBV1dGxh+5Z0FuRn+uBM8eB20fgjKfQJtZtAV8/oW/M2jv8fk2qPpB9h0Y
+        Q/PrMfhdFG7gbyunPQJoLZIIJdGtZaDr11A4yBDoYfYJnGktkSglGW6sw2Dv0sHNHxR4gb+XQNmTUKvv
+        AeXvBu0fwO4fxSG6VV28NrcDRb4lhJX10a5CzV8lXuWgZD17Rf5lwC3vEPfsYzjbWCse5SFxagjHxaFN
+        wWOe6Pa/aBPVJxOSEGdbgJFgm5QKPOFCBzIUHwBZ4p45JKUCL7XYbKdu/18tT4kTvM7FiSoMfMx7iQ/N
+        rki0nmZ7VTx/Vz5xgrfX0PH3QJZabnGC9vbQGTeZKhQWJ7T5GFZQ9rK8jRiu78RdbgrOzW2UN9mUEieU
+        +RFVsifkrYPE3alH5dNdkygtTrjj1FWs1ffJW4c2F8MyZ+kkKokTvRIg6OCJgqPZr9gzm7ms0GwXPLM/
+        5t/sPQRt0rvkNK6eo6VaTqdoVOd7/0nYJp1E3PJ3u7ZjsXofqAceRC/sS3HLJjuJYmOu7Ouwrmfu0Ytj
+        sWD9N6JkEsXEdbAG6+ClJqx/GODCzHJseXwrHhf37riJWUyc8Mz1UIfumHQMMMrciRUEfDHphwq2ylM+
+        RuY3sGioYyalBCHB+IxW9ulAjuM2463FKP4sJt7EJb9JSgXq+siB7IaUVEeZmx2xMy47462lmMTbmBNd
+        yTCJCj1BLXfiFMvFpVXQ9eZMFxHa6aIk3HDkmROduDF/noil7Rc4H6wWjy7oYHsqCV4luPz6VkbcUpvA
+        Oh1fUvZz+iLaDQ5i3yQDsNGHySu+22t7CpPay6b80/h/jLs3uc6d0fs8ySfgOYHjFz+siluT1z7FKo0y
+        WzDQfWxhgW9E9p1ML7Uq0I5JJyDt33RDopOMesf1ED1PSdkR9s0FwD/rrqlJV0z/XwAAAABJRU5ErkJg
+        gg==
+</value>
   </data>
 </root>

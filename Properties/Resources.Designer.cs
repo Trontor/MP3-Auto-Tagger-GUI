@@ -69,5 +69,15 @@ namespace MP3_Auto_Tagger_GUI.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap question_sign_on_person_head {
+            get {
+                object obj = ResourceManager.GetObject("question_sign_on_person_head", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

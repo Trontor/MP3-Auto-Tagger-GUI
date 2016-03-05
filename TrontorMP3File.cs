@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace MP3_Auto_Tagger_GUI
         public bool ReverseSplitHeifen;
         public string FilePath { get; set; }
         public string FileName { get; set; }
+        private bool MetaFileSplitHeifen = false;
         public string BaseArtist { get; set; }
 
         private string Start
@@ -82,7 +84,24 @@ namespace MP3_Auto_Tagger_GUI
                 .ToDictionary(x => (string)x.Attribute("key"), x => (string)x.Attribute("value"));
         }
 
-        public string FixFileName()
+        public string MetaFixFilename()
+        {
+            MetaFileSplitHeifen = true; 
+            if (FilePath == null) throw new ArgumentNullException("path");
+            FileName = Path.GetFileName(FilePath).Replace(".mp3", "");
+            if (!FileName.Contains("-"))
+            {
+                Console.WriteLine("File does not contain a heifen to seperate :(... skipping");
+                return FileName;
+            }
+            //FindAndReplace();
+            CompleteFeaturingBrackets();
+            ExtractArtists();
+            AttachFeaturedArtists(); 
+            return FileName;
+
+        }
+        public string FixFileName(bool WriteID3Tags = true)
         {
             LoadDictionary();
             if (FilePath == null) throw new ArgumentNullException("path");
@@ -96,7 +115,8 @@ namespace MP3_Auto_Tagger_GUI
             CompleteFeaturingBrackets();
             ExtractArtists();
             AttachFeaturedArtists();
-            WriteId3Tags();
+            if (WriteID3Tags)
+                WriteId3Tags();
 
             if (SplitHeifenKey > 0 && !_dictionary.ContainsKey(FileName))
                 _dictionary.Add(FileName, SplitHeifenKey.ToString());
@@ -141,9 +161,7 @@ namespace MP3_Auto_Tagger_GUI
                 using (var file = TagLib.File.Create(FilePath))
                 {
                     _artists.Reverse();
-                    var split =
-                        SplitBy(FileNameNoAttachedArtists.Replace(".mp3", ""), '-',
-                            ReverseSplitHeifen ? 0 : SplitHeifenKey).ToArray();
+                    var split = SplitBy(FileNameNoAttachedArtists.Replace(".mp3", ""), '-', ReverseSplitHeifen ? 0 : SplitHeifenKey).ToArray();
                     string title = split[1].Trim();
 
                     if (!file.Tag.Performers.ToArray().SequenceEqual(_artists.ToArray()))
@@ -223,28 +241,38 @@ namespace MP3_Auto_Tagger_GUI
             int instanceCount = s.Count(f => f == '-');
             if (instanceCount > 1 && SplitHeifenKey == 0)
             {
-                var notReplaced = true;
-                while (notReplaced)
+                if (!MetaFileSplitHeifen)
                 {
-                    notReplaced = false;
-                    string mboxString = "----------------------------" + Environment.NewLine +
-                        string.Format("The file:{0} has more than one heifen:", FileName)
-                    + Environment.NewLine +
-                    "I'm not too sure which heifen you want to use." + Environment.NewLine +
-                    string.Format("Choose an integer value corresponding with its occurence count (1 - {0}).",
-                        instanceCount) + Environment.NewLine +
-                    "----------------------------" + Environment.NewLine + Environment.NewLine +
-                    "I want to split heifen 2 (Yes), 1 (No)";
-                    int key = 1;
-                    if (MessageBox.Show(mboxString, "PHYSIKS ENGINE ERROR", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                        key = 2;
-
-                    SplitHeifenKey = key;
-                    if (SplitHeifenKey > instanceCount)
+                    var notReplaced = true;
+                    while (notReplaced)
                     {
-                        ColoredConsoleWrite(Color.Red, "Sorry! That number exceeds the amount of heifens in the filename :^(");
-                        notReplaced = true;
+                        notReplaced = false;
+                        string mboxString = "----------------------------" + Environment.NewLine +
+                                            string.Format("The file:{0} has more than one heifen:", FileName)
+                                            + Environment.NewLine +
+                                            "I'm not too sure which heifen you want to use." + Environment.NewLine +
+                                            string.Format(
+                                                "Choose an integer value corresponding with its occurence count (1 - {0}).",
+                                                instanceCount) + Environment.NewLine +
+                                            "----------------------------" + Environment.NewLine + Environment.NewLine +
+                                            "I want to split heifen 2 (Yes), 1 (No)";
+                        int key = 1;
+                        if (MessageBox.Show(mboxString, "PHYSIKS ENGINE ERROR", MessageBoxButtons.YesNo) ==
+                            DialogResult.Yes)
+                            key = 2;
+
+                        SplitHeifenKey = key;
+                        if (SplitHeifenKey > instanceCount)
+                        {
+                            ColoredConsoleWrite(Color.Red,
+                                "Sorry! That number exceeds the amount of heifens in the filename :^(");
+                            notReplaced = true;
+                        }
                     }
+                }
+                else
+                {
+                    SplitHeifenKey = 2;
                 }
             }
             var filePaths = SplitBy(s.Trim(), '-', SplitHeifenKey);
@@ -254,57 +282,62 @@ namespace MP3_Auto_Tagger_GUI
 
         private void FindAndReplace()
         {
-            var replaceList = new Dictionary<string, string>
+            try
             {
-                {"[", "("},
-                {"]", ")"},
-                {"OFFICIAL", ""},
-                {"Official", ""},
-                {"Video)", "|"},
-                {"video)", "|"},
-                {"FEATURING", "FT"},
-                {" featuring ", "ft.  "},
-                {" (Featuring ", " (ft. "},
-                {",)", ")"},
-                {" FEAT ", " (FEAT "},
-                {" Feat ", " (FEAT "},
-                {" feat. ", " (FEAT "},
-                {"(Feat.", "(ft."},
-                {"(FEAT", "(feat"},
-                {"(feat", "(ft"},
-                {"FEAT ", "ft"},
-                {"( )", ""},
-                {"()", ""},
-                {"(|", ""},
-                {"( |", ""},
-                {"(  )", ""},
-                {"FT ", "ft. "},
-                {"Ft ", "ft. "},
-                {"ft ", "ft. "},
-                {" FT. ", " (ft. "},
-                {" FT", " (ft"},
-                {"(FT ", "(ft. "},
-                {" (ft ", " (ft."},
-                {" (Ft ", "(ft. "}
-            };
-            while (true)
-            {
-                var reiterate = false;
-                foreach (var vari in replaceList)
+                var replaceList = new Dictionary<string, string>
                 {
-                    if (FileName.ToLower().Contains(vari.Key.ToLower()))
-                        reiterate = true;
-                }
-                if (reiterate)
-                    foreach (
-                        var replaceItem in
-                            replaceList.Where(replaceItem => FileName.ToLower().Contains(replaceItem.Key.ToLower())))
+                    {"[", "("},
+                    {"]", ")"},
+                    {"OFFICIAL", ""},
+                    {"Official", ""},
+                    {"Video)", "|"},
+                    {"video)", "|"}, {" Featuring ", " (ft. "},
+                    {",)", ")"},
+                    {" FEAT ", " (FEAT "},
+                    {" Feat ", " (FEAT "},
+                    {" feat. ", " (FEAT "},
+                    {"(Feat.", "(ft."},
+                    {"(FEAT", "(feat"},
+                    {"(feat", "(ft"},
+                    {"FEAT ", "ft"},
+                    {"( )", ""},
+                    {"()", ""},
+                    {"(|", ""},
+                    {"( |", ""},
+                    {"(  )", ""},
+                    {"FT ", "ft. "},
+                    {"Ft ", "ft. "},
+                    {"ft ", "ft. "},
+                    {" FT. ", " (ft. "},
+                    {" FT", " (ft"},
+                    {"(FT ", "(ft. "},
+                    {" (ft ", " (ft."},
+                    {" (Ft ", "(ft. "}
+                };
+                while (true)
+                {
+                    var reiterate = false;
+                    foreach (var vari in replaceList)
                     {
-                        FileName = FileName.Replace(replaceItem.Key.ToLower(), replaceItem.Value);
-                        FileName = FileName.Replace(replaceItem.Key, replaceItem.Value);
+                        if (FileName.ToLower().Contains(vari.Key.ToLower()))
+                            reiterate = true;
                     }
-                if (reiterate) continue;
-                break;
+                    if (reiterate)
+                        foreach (
+                            var replaceItem in
+                                replaceList.Where(replaceItem => FileName.ToLower().Contains(replaceItem.Key.ToLower()))
+                            )
+                        {
+                            FileName = FileName.Replace(replaceItem.Key.ToLower(), replaceItem.Value);
+                            FileName = FileName.Replace(replaceItem.Key, replaceItem.Value);
+                        }
+                    if (reiterate) continue;
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -11,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using Awesomium.Core;
 using HtmlAgilityPack;
@@ -99,6 +101,25 @@ namespace MP3_Auto_Tagger_GUI
             public string Value;
         }
 
+        private static List<string> _ariaChartSongs = new List<string>();
+        private static void SaveAriaDictionary()
+        {
+            var xElem = new XElement(
+                "items",
+                _ariaChartSongs.Select(x => new XElement("item", x)));
+            string xml = xElem.ToString();
+            xElem.Save("ChartSongs.xml");
+        }
+
+        private static void LoadChartDictionary()
+        {
+            var xElem2 = new XElement("items");
+            if (System.IO.File.Exists("ChartSongs.xml"))
+                xElem2 = XElement.Load("ChartSongs.xml");
+            else
+                xElem2.Save("ChartSongs.xml");
+            _ariaChartSongs = xElem2.Descendants("item").Select(x => x.Value).ToList();
+        }
         /// <summary>
         /// Resize the image to the specified width and height.
         /// </summary>
@@ -388,23 +409,159 @@ namespace MP3_Auto_Tagger_GUI
             {
                 if (e.IsMainFrame)
                 {
+                    LoadChartDictionary();
                     var
                         doc = new HtmlDocument();
 
-                    doc.LoadHtml(ariaView.HTML);
-                    string site_XPath = "//*[@id=\"dvChartItems\"]";
-                    var node = doc.DocumentNode.SelectSingleNode(site_XPath);
-                    for (var index = 0; index < node.ChildNodes.Count; index++)
+                    doc.LoadHtml(ariaView.ExecuteJavascriptWithResult("document.getElementsByTagName('html')[0].innerHTML"));
+                    new Thread(() =>
                     {
-                        var item_Row = doc.DocumentNode.SelectSingleNode(site_XPath).ChildNodes[index];
-                        foreach (var nodes in item_Row.ChildNodes)
-                        {
-                            if (nodes.Attributes["class"].Value.Contains("title-artist"))
+                        string site_XPath = "//*[@id=\"dvChartItems\"]";
+                        var node = doc.DocumentNode.SelectSingleNode(site_XPath);
+                        if (node != null)
+                            for (var index = 0; index < node.ChildNodes.Count; index++)
                             {
-                                System.Console.WriteLine(HttpUtility.HtmlDecode(nodes.ChildNodes[1].InnerText + " - " + nodes.ChildNodes[0].InnerText));
+                                var itemRow = node.ChildNodes[index];
+                                foreach (var nodes in itemRow.ChildNodes)
+                                {
+                                    if (nodes.Attributes["class"].Value.Contains("title-artist"))
+                                    {
+                                        string tempPath = Path.GetTempFileName();
+                                        string artist = HttpUtility.HtmlDecode(nodes.ChildNodes[1].InnerText);
+                                        string title = HttpUtility.HtmlDecode(nodes.ChildNodes[0].InnerText);
+                                        string both = GetFixedFileName(artist + " - " + title);
+                                        var enumuerable = ariaFlow.Controls.OfType<MusicChart>();
+                                        if (_ariaChartSongs.Contains(both) || enumuerable.Any(x => x.Both() == both)) continue;
+                                        if (
+                                            itemRow.ChildNodes.Count(
+                                                x => x.Attributes["class"].Value.Contains("title-image")) == 1)
+                                        {
+                                            string URL =
+                                                itemRow.ChildNodes.Where(
+                                                    x => x.Attributes["class"].Value.Contains("title-image"))
+                                                    .ToArray()[
+                                                        0]
+                                                    .ChildNodes[0].ChildNodes[0].Attributes["src"].Value;
+                                            using (var imgClient = new WebClient())
+                                            // WebClient class inherits IDisposable
+                                            {
+                                                try
+                                                {
+                                                    Do(() => imgClient.DownloadFile(URL, tempPath),
+                                                        TimeSpan.FromSeconds(1));
+                                                }
+                                                catch (AggregateException)
+                                                {
+                                                }
+                                            }
+                                        }
+                                        Image img = Image.FromFile(tempPath);
+
+
+                                        MusicChart Chart = new MusicChart(artist, title, ResizeImage(img, 44, 44));
+                                        Chart.Size = new Size(ariaFlow.Size.Width - 25, Chart.Height);
+                                        Chart.btn_ClearSong.Click += (i, y) =>
+                                        {
+                                            ariaFlow.Controls.Remove(ariaFlow.Controls[ariaFlow.Controls.IndexOf(Chart)]);
+                                            _ariaChartSongs.Add(both);
+                                            SaveAriaDictionary();
+                                        };
+                                        Chart.btn_Reorder.Click += (i, y) =>
+                                        {
+                                            ariaFlow.Controls.SetChildIndex(Chart, ariaFlow.Controls.Count - 1);
+                                        };
+                                        Chart.btn_LoadVideo.Click += (i, y) =>
+                                        {
+                                            Process.Start(
+                                                $"https://www.youtube.com/results?search_query={artist}+-+{title}");
+                                        };
+                                        Invoke(new Action(() => ariaFlow.Controls.Add(Chart)));
+                                    }
+                                }
                             }
+                        Debug.WriteLine("Finished Scanning Aria Charts");
+                    }).Start();
+                }
+            };
+        }
+
+
+        private void ScanBillboardHot100()
+        {
+            string siteUrl = "http://www.billboard.com/charts/hot-100";
+            WebView ariaView = WebCore.CreateWebView(1024, 768, WebViewType.Offscreen);
+            ariaView.Source = new Uri(siteUrl);
+            ariaView.LoadingFrameComplete += (s, e) =>
+            {
+                if (e.IsMainFrame)
+                {
+                    LoadChartDictionary();
+                    var
+                        doc = new HtmlDocument();
+
+                    doc.LoadHtml(ariaView.ExecuteJavascriptWithResult("document.getElementsByTagName('html')[0].innerHTML"));
+                    new Thread(() =>
+                    {
+                        var node = doc.DocumentNode.Descendants("article").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Contains("chart-row"));
+                        foreach (var ele_Article in node.Take(20))
+                        {
+                            HtmlNode ele_chartrow__primary = ele_Article.SelectSingleNode("div[1]");
+                            HtmlNode ele_chartrowtitle = ele_chartrow__primary.SelectSingleNode("div[@class='chart-row__title']");
+                            HtmlNode ele_image = ele_chartrow__primary.SelectSingleNode("div[@class='chart-row__image']");
+
+                            string tempPath = Path.GetTempFileName();
+                            string artist;
+                            if (ele_chartrowtitle.SelectSingleNode("h3[1]").ChildNodes.Count > 1)
+                                artist = HttpUtility.HtmlDecode(ele_chartrowtitle.SelectSingleNode("h3[1]").SelectSingleNode("a").InnerText.Replace("\n", "").Trim());
+                            else
+                                artist = HttpUtility.HtmlDecode(ele_chartrowtitle.SelectSingleNode("h3[1]").InnerText.Replace("\n", "").Trim());
+                            string title = HttpUtility.HtmlDecode(ele_chartrowtitle.SelectSingleNode("h2[1]").InnerText.Replace("\n", "").Trim());
+                            string both = GetFixedFileName(artist + " - " + title);
+                            if (_ariaChartSongs.Contains(both)) continue;
+                            Image img = Properties.Resources.question_sign_on_person_head; ;
+                            if (ele_image.Attributes.Count > 1)
+                            {
+                                string URL =
+                                    ele_image.Attributes[
+                                        ele_image.Attributes["style"] == null ? "data-imagesrc" : "style"].Value
+                                        .Replace("background-image: url(", "").Replace(")", "");
+                                using (var imgClient = new WebClient())
+                                // WebClient class inherits IDisposable
+                                {
+                                    try
+                                    {
+                                        Do(() => imgClient.DownloadFile(URL, tempPath),
+                                            TimeSpan.FromSeconds(1));
+                                    }
+                                    catch (AggregateException)
+                                    {
+                                    }
+                                }
+                                img = Image.FromFile(tempPath);
+                            }
+
+
+                            MusicChart Chart = new MusicChart(artist, title, ResizeImage(img, 44, 44));
+                            Chart.Size = new Size(ariaFlow.Size.Width - 25, Chart.Height);
+                            Chart.btn_ClearSong.Click += (i, y) =>
+                            {
+                                ariaFlow.Controls.Remove(ariaFlow.Controls[ariaFlow.Controls.IndexOf(Chart)]);
+                                _ariaChartSongs.Add(both);
+                                SaveAriaDictionary();
+                            };
+                            Chart.btn_Reorder.Click += (i, y) =>
+                            {
+                                ariaFlow.Controls.SetChildIndex(Chart, ariaFlow.Controls.Count - 1);
+                            };
+                            Chart.btn_LoadVideo.Click += (i, y) =>
+                            {
+                                Process.Start(
+                                    $"https://www.youtube.com/results?search_query={artist}+-+{title}");
+                            };
+                            Invoke(new Action(() => ariaFlow.Controls.Add(Chart)));
                         }
-                    }
+                        Debug.WriteLine("Finished Scanning Billboard Charts");
+                    }).Start();
                 }
             };
         }
@@ -736,8 +893,15 @@ namespace MP3_Auto_Tagger_GUI
             _path = pathdir;
             lblMonitoringDirectory.Text = pathdir;
         }
-
-
+        //protected override CreateParams CreateParams
+        //{
+        //    get
+        //    {
+        //        CreateParams cp = base.CreateParams;
+        //        cp.ExStyle |= 0x02000000;   // WS_EX_COMPOSITED
+        //        return cp;
+        //    }
+        //}
         private void logInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
@@ -760,7 +924,7 @@ namespace MP3_Auto_Tagger_GUI
             {
                 case "filter":
                     _filter = true;
-                    ChangeMonitorPath(@"D:\Music - Copy");
+                    ChangeMonitorPath(@"D:\Music - Copy\filter");
                     Console(Color.PapayaWhip, "Filter has been enabled.");
                     break;
                 case "regular":
@@ -794,6 +958,10 @@ namespace MP3_Auto_Tagger_GUI
             logInput.Text = "";
         }
 
+        public string GetFixedFileName(string name)
+        {
+            return new TrontorMP3File(name).MetaFixFilename();
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
@@ -831,6 +999,7 @@ namespace MP3_Auto_Tagger_GUI
             SetStatus("Preparing music file analysis");
             AnalyseAllFiles();
             ScanAriaCharts();
+            ScanBillboardHot100();
             timer1.Enabled = true;
             RunConsoleCommand("help");
         }
@@ -839,14 +1008,21 @@ namespace MP3_Auto_Tagger_GUI
         {
             AnalyseAllFiles();
         }
+        bool firstLoad = true;
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            if (this.WindowState == FormWindowState.Minimized)
+            if (!firstLoad)
             {
-                this.ShowInTaskbar = false;
+                MessageBox.Show(this.WindowState.ToString());
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    this.ShowInTaskbar = false;
+                }
+                this.ShowInTaskbar = true;
             }
-            else this.ShowInTaskbar = true;
+            else
+                firstLoad = true;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -885,6 +1061,11 @@ namespace MP3_Auto_Tagger_GUI
         private void Awesomium_Windows_Forms_WebControl_LoadingFrameComplete(object sender, FrameEventArgs e)
         {
             MessageBox.Show("Test");
+        }
+
+        private void Form1_Activated(object sender, EventArgs e)
+        {
+            CenterToScreen();
         }
     }
 }

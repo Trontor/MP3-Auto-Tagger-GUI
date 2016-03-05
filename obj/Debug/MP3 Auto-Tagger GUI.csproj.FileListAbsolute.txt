@@ -42,3 +42,5 @@ C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\awesomium_pr
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\inspector.pak
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\xinput9_1_0.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\pdf_js.pak
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3 Auto-Tagger GUI.csprojResolveAssemblyReference.cache
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3_Auto_Tagger_GUI.MusicChart.resources

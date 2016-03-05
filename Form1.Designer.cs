@@ -53,12 +53,15 @@ namespace MP3_Auto_Tagger_GUI
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.lblMonitorIntialised = new MetroFramework.Controls.MetroLabel();
             this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
+            this.ariaFlow = new System.Windows.Forms.FlowLayoutPanel();
             this.metroTabPage5 = new MetroFramework.Controls.MetroTabPage();
             this.logInput = new MetroFramework.Controls.MetroTextBox();
             this.logBox = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.lblMonitoringDirectory = new System.Windows.Forms.Label();
+            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.webControl1 = new Awesomium.Windows.Forms.WebControl(this.components);
             this.tabControl.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.pnlOutcome.SuspendLayout();
@@ -68,7 +71,9 @@ namespace MP3_Auto_Tagger_GUI
             this.pnlProcess.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.metroTabPage4.SuspendLayout();
             this.metroTabPage5.SuspendLayout();
+            this.metroTabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -77,6 +82,7 @@ namespace MP3_Auto_Tagger_GUI
             this.tabControl.Controls.Add(this.metroTabPage3);
             this.tabControl.Controls.Add(this.metroTabPage4);
             this.tabControl.Controls.Add(this.metroTabPage5);
+            this.tabControl.Controls.Add(this.metroTabPage2);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(20, 60);
             this.tabControl.Name = "tabControl";
@@ -333,6 +339,7 @@ namespace MP3_Auto_Tagger_GUI
             // 
             // metroTabPage4
             // 
+            this.metroTabPage4.Controls.Add(this.ariaFlow);
             this.metroTabPage4.HorizontalScrollbarBarColor = true;
             this.metroTabPage4.HorizontalScrollbarHighlightOnWheel = false;
             this.metroTabPage4.HorizontalScrollbarSize = 10;
@@ -340,10 +347,21 @@ namespace MP3_Auto_Tagger_GUI
             this.metroTabPage4.Name = "metroTabPage4";
             this.metroTabPage4.Size = new System.Drawing.Size(452, 294);
             this.metroTabPage4.TabIndex = 3;
-            this.metroTabPage4.Text = "Aria Charts";
+            this.metroTabPage4.Text = "Charts";
             this.metroTabPage4.VerticalScrollbarBarColor = true;
             this.metroTabPage4.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage4.VerticalScrollbarSize = 10;
+            // 
+            // ariaFlow
+            // 
+            this.ariaFlow.AutoScroll = true;
+            this.ariaFlow.BackColor = System.Drawing.Color.Transparent;
+            this.ariaFlow.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.ariaFlow.Location = new System.Drawing.Point(1, 1);
+            this.ariaFlow.Name = "ariaFlow";
+            this.ariaFlow.Size = new System.Drawing.Size(451, 293);
+            this.ariaFlow.TabIndex = 2;
+            this.ariaFlow.WrapContents = false;
             // 
             // metroTabPage5
             // 
@@ -427,6 +445,27 @@ namespace MP3_Auto_Tagger_GUI
             this.lblMonitoringDirectory.TabIndex = 2;
             this.lblMonitoringDirectory.Text = "Ttt";
             // 
+            // metroTabPage2
+            // 
+            this.metroTabPage2.Controls.Add(this.webControl1);
+            this.metroTabPage2.HorizontalScrollbarBarColor = true;
+            this.metroTabPage2.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage2.HorizontalScrollbarSize = 10;
+            this.metroTabPage2.Location = new System.Drawing.Point(4, 38);
+            this.metroTabPage2.Name = "metroTabPage2";
+            this.metroTabPage2.Size = new System.Drawing.Size(452, 294);
+            this.metroTabPage2.TabIndex = 5;
+            this.metroTabPage2.Text = "Browser";
+            this.metroTabPage2.VerticalScrollbarBarColor = true;
+            this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage2.VerticalScrollbarSize = 10;
+            // 
+            // webControl1
+            // 
+            this.webControl1.Location = new System.Drawing.Point(1, 1);
+            this.webControl1.Size = new System.Drawing.Size(451, 293);
+            this.webControl1.TabIndex = 2;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -435,11 +474,13 @@ namespace MP3_Auto_Tagger_GUI
             this.Controls.Add(this.lblMonitoringDirectory);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tabControl);
+            this.DoubleBuffered = false;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.DropShadow;
             this.Text = "Rohyl\'s Personal MP3 File Auto-Tagger";
+            this.Activated += new System.EventHandler(this.Form1_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
@@ -454,7 +495,9 @@ namespace MP3_Auto_Tagger_GUI
             this.metroTabPage3.ResumeLayout(false);
             this.metroTabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.metroTabPage4.ResumeLayout(false);
             this.metroTabPage5.ResumeLayout(false);
+            this.metroTabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -489,6 +532,9 @@ namespace MP3_Auto_Tagger_GUI
         private MetroFramework.Controls.MetroLabel lblMonitorStatus;
         private Label label1;
         private Label lblMonitoringDirectory;
+        private FlowLayoutPanel ariaFlow;
+        private MetroFramework.Controls.MetroTabPage metroTabPage2;
+        private Awesomium.Windows.Forms.WebControl webControl1;
     }
 }
 
