@@ -1,34 +1,13 @@
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\bin\Debug\MP3 Auto-Tagger GUI.exe.config
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\bin\Debug\MP3 Auto-Tagger GUI.exe
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\bin\Debug\MP3 Auto-Tagger GUI.pdb
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\obj\Debug\MP3_Auto_Tagger_GUI.Properties.Resources.resources
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\obj\Debug\MP3 Auto-Tagger GUI.csproj.GenerateResource.Cache
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\obj\Debug\MP3 Auto-Tagger GUI.exe
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\obj\Debug\MP3 Auto-Tagger GUI.pdb
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\bin\Debug\MetroFramework.Design.dll
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\bin\Debug\MetroFramework.dll
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\bin\Debug\MetroFramework.Fonts.dll
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\obj\Debug\MP3_Auto_Tagger_GUI.Form1.resources
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\bin\Debug\policy.2.0.taglib-sharp.dll
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\bin\Debug\taglib-sharp.dll
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\bin\Debug\policy.2.0.taglib-sharp.config
-D:\Documents\rjoshi1\My Documents\GitHub\MP3 Auto-Tagger GUI\obj\Debug\MP3 Auto-Tagger GUI.csprojResolveAssemblyReference.cache
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\MP3 Auto-Tagger GUI.exe.config
-C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3_Auto_Tagger_GUI.Form1.resources
-C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3_Auto_Tagger_GUI.Properties.Resources.resources
-C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3 Auto-Tagger GUI.csproj.GenerateResource.Cache
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\MP3 Auto-Tagger GUI.exe
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\MP3 Auto-Tagger GUI.pdb
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\Awesomium.Core.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\Awesomium.Windows.Forms.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\MetroFramework.Design.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\MetroFramework.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\MetroFramework.Fonts.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\policy.2.0.taglib-sharp.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\taglib-sharp.dll
-C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\policy.2.0.taglib-sharp.config
-C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3 Auto-Tagger GUI.exe
-C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3 Auto-Tagger GUI.pdb
-C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\Awesomium.Core.dll
-C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\Awesomium.Windows.Forms.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\Awesomium.Core.xml
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\Awesomium.Windows.Forms.xml
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\awesomium.dll
@@ -42,5 +21,12 @@ C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\awesomium_pr
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\inspector.pak
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\xinput9_1_0.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\pdf_js.pak
-C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3 Auto-Tagger GUI.csprojResolveAssemblyReference.cache
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\policy.2.0.taglib-sharp.config
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3_Auto_Tagger_GUI.LyricsDisplay.resources
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3_Auto_Tagger_GUI.MusicChart.resources
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3_Auto_Tagger_GUI.Form1.resources
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3_Auto_Tagger_GUI.Properties.Resources.resources
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3 Auto-Tagger GUI.csproj.GenerateResource.Cache
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3 Auto-Tagger GUI.exe
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3 Auto-Tagger GUI.pdb
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\Debug\MP3 Auto-Tagger GUI.csprojResolveAssemblyReference.cache

@@ -30,13 +30,13 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MusicChart));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btn_Reorder = new MetroFramework.Controls.MetroButton();
+            this.btn_LoadVideo = new System.Windows.Forms.Button();
             this.image = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbl_Artist = new System.Windows.Forms.Label();
             this.lbl_Title = new System.Windows.Forms.Label();
-            this.btn_ClearSong = new MetroFramework.Controls.MetroButton();
-            this.btn_LoadVideo = new MetroFramework.Controls.MetroButton();
-            this.btn_Reorder = new MetroFramework.Controls.MetroButton();
+            this.btn_ClearSong = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
             this.panel1.SuspendLayout();
@@ -63,6 +63,33 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(434, 50);
             this.tableLayoutPanel1.TabIndex = 5;
+            // 
+            // btn_Reorder
+            // 
+            this.btn_Reorder.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btn_Reorder.BackColor = System.Drawing.Color.White;
+            this.btn_Reorder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_Reorder.BackgroundImage")));
+            this.btn_Reorder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btn_Reorder.Location = new System.Drawing.Point(413, 6);
+            this.btn_Reorder.Name = "btn_Reorder";
+            this.btn_Reorder.Size = new System.Drawing.Size(16, 38);
+            this.btn_Reorder.TabIndex = 10;
+            this.btn_Reorder.UseSelectable = true;
+            // 
+            // btn_LoadVideo
+            // 
+            this.btn_LoadVideo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btn_LoadVideo.BackColor = System.Drawing.Color.White;
+            this.btn_LoadVideo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_LoadVideo.BackgroundImage")));
+            this.btn_LoadVideo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btn_LoadVideo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_LoadVideo.ForeColor = System.Drawing.Color.LightGray;
+            this.btn_LoadVideo.Location = new System.Drawing.Point(314, 6);
+            this.btn_LoadVideo.Name = "btn_LoadVideo";
+            this.btn_LoadVideo.Size = new System.Drawing.Size(40, 38);
+            this.btn_LoadVideo.TabIndex = 9;
+            this.btn_LoadVideo.UseVisualStyleBackColor = false;
+            this.btn_LoadVideo.Click += new System.EventHandler(this.btn_LoadVideo_Click);
             // 
             // image
             // 
@@ -114,41 +141,20 @@
             this.btn_ClearSong.BackColor = System.Drawing.Color.White;
             this.btn_ClearSong.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_ClearSong.BackgroundImage")));
             this.btn_ClearSong.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btn_ClearSong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_ClearSong.ForeColor = System.Drawing.Color.LightGray;
             this.btn_ClearSong.Location = new System.Drawing.Point(364, 6);
             this.btn_ClearSong.Name = "btn_ClearSong";
             this.btn_ClearSong.Size = new System.Drawing.Size(40, 38);
             this.btn_ClearSong.TabIndex = 6;
-            this.btn_ClearSong.UseSelectable = true;
-            // 
-            // btn_LoadVideo
-            // 
-            this.btn_LoadVideo.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btn_LoadVideo.BackColor = System.Drawing.Color.White;
-            this.btn_LoadVideo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_LoadVideo.BackgroundImage")));
-            this.btn_LoadVideo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btn_LoadVideo.Location = new System.Drawing.Point(314, 6);
-            this.btn_LoadVideo.Name = "btn_LoadVideo";
-            this.btn_LoadVideo.Size = new System.Drawing.Size(40, 38);
-            this.btn_LoadVideo.TabIndex = 9;
-            this.btn_LoadVideo.UseSelectable = true;
-            // 
-            // btn_Reorder
-            // 
-            this.btn_Reorder.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btn_Reorder.BackColor = System.Drawing.Color.White;
-            this.btn_Reorder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_Reorder.BackgroundImage")));
-            this.btn_Reorder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btn_Reorder.Location = new System.Drawing.Point(413, 6);
-            this.btn_Reorder.Name = "btn_Reorder";
-            this.btn_Reorder.Size = new System.Drawing.Size(16, 38);
-            this.btn_Reorder.TabIndex = 10;
-            this.btn_Reorder.UseSelectable = true;
+            this.btn_ClearSong.UseVisualStyleBackColor = false;
             // 
             // MusicChart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
+            this.ForeColor = System.Drawing.Color.Chocolate;
             this.Name = "MusicChart";
             this.Size = new System.Drawing.Size(434, 50);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -161,11 +167,11 @@
         #endregion
         private System.Windows.Forms.PictureBox image;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label lbl_Artist;
-        private System.Windows.Forms.Label lbl_Title;
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        public MetroFramework.Controls.MetroButton btn_LoadVideo;
-        public MetroFramework.Controls.MetroButton btn_ClearSong;
+        public System.Windows.Forms.Button btn_LoadVideo;
+        public new System.Windows.Forms.Button btn_ClearSong;
         public MetroFramework.Controls.MetroButton btn_Reorder;
+        public System.Windows.Forms.Label lbl_Title;
+        public System.Windows.Forms.Label lbl_Artist;
     }
 }

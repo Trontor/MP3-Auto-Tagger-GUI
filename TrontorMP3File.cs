@@ -13,7 +13,6 @@ namespace MP3_Auto_Tagger_GUI
 {
     public class TrontorMP3File
     {
-        private static Dictionary<string, string> _dictionary = new Dictionary<string, string>();
 
         private readonly List<string> _artists = new List<string>();
 
@@ -23,6 +22,7 @@ namespace MP3_Auto_Tagger_GUI
         public string FilePath { get; set; }
         public string FileName { get; set; }
         private bool MetaFileSplitHeifen = false;
+        private string _fileNameNoAttachedArtists;
         public string BaseArtist { get; set; }
 
         private string Start
@@ -62,45 +62,53 @@ namespace MP3_Auto_Tagger_GUI
 
         public int SplitHeifenKey { get; set; }
 
+        private static Dictionary<string, string> dictionary_FileName = new Dictionary<string, string>();
+        
+        private static string path_chartSongs = Path.Combine(Form1.path_programData, "MP3FileNameConfig.xml"); 
+        private static void LoadDictionary()
+        {
+            var xElem2 = new XElement("items");
+            if (File.Exists(path_chartSongs))
+                xElem2 = XElement.Load(path_chartSongs);
+            else
+                xElem2.Save(path_chartSongs);
+            dictionary_FileName = xElem2.Descendants("item")
+                .ToDictionary(x => (string)x.Attribute("key"), x => (string)x.Attribute("value"));
+        }
+
         private static void SaveDictionary()
         {
             var xElem = new XElement(
                 "items",
-                _dictionary.Select(
+                dictionary_FileName.Select(
                     x => new XElement("item", new XAttribute("key", x.Key), new XAttribute("value", x.Value)))
                 );
             string xml = xElem.ToString();
-            xElem.Save("MP3FileNameConfig.xml");
+            xElem.Save(path_chartSongs);
         }
 
-        private static void LoadDictionary()
+        public string MetaFixFilename(bool attachArtists = true)
         {
-            var xElem2 = new XElement("items");
-            if (File.Exists("MP3FileNameConfig.xml"))
-                xElem2 = XElement.Load("MP3FileNameConfig.xml");
-            else
-                xElem2.Save("MP3FileNameConfig.xml");
-            _dictionary = xElem2.Descendants("item")
-                .ToDictionary(x => (string)x.Attribute("key"), x => (string)x.Attribute("value"));
-        }
-
-        public string MetaFixFilename()
-        {
-            MetaFileSplitHeifen = true; 
+            MetaFileSplitHeifen = true;
             if (FilePath == null) throw new ArgumentNullException("path");
-            FileName = Path.GetFileName(FilePath).Replace(".mp3", "");
+            if (File.Exists(FilePath))
+                FileName = Path.GetFileName(FilePath).Replace(".mp3", "");
+            else
+                FileName = FilePath;
             if (!FileName.Contains("-"))
             {
                 Console.WriteLine("File does not contain a heifen to seperate :(... skipping");
                 return FileName;
             }
-            //FindAndReplace();
+            FindAndReplace();
             CompleteFeaturingBrackets();
             ExtractArtists();
-            AttachFeaturedArtists(); 
+            if (attachArtists)
+                AttachFeaturedArtists();
             return FileName;
 
         }
+
         public string FixFileName(bool WriteID3Tags = true)
         {
             LoadDictionary();
@@ -118,8 +126,8 @@ namespace MP3_Auto_Tagger_GUI
             if (WriteID3Tags)
                 WriteId3Tags();
 
-            if (SplitHeifenKey > 0 && !_dictionary.ContainsKey(FileName))
-                _dictionary.Add(FileName, SplitHeifenKey.ToString());
+            if (SplitHeifenKey > 0 && !dictionary_FileName.ContainsKey(FileName))
+                dictionary_FileName.Add(FileName, SplitHeifenKey.ToString());
 
             SaveDictionary();
             return FileName;
@@ -236,7 +244,7 @@ namespace MP3_Auto_Tagger_GUI
         private string PartOfFileName(string s, bool first)
         {
             int savedSplitHeifen;
-            if (_dictionary.ContainsKey(FileName) && int.TryParse(_dictionary[FileName], out savedSplitHeifen))
+            if (dictionary_FileName.ContainsKey(FileName) && int.TryParse(dictionary_FileName[FileName], out savedSplitHeifen))
                 SplitHeifenKey = savedSplitHeifen;
             int instanceCount = s.Count(f => f == '-');
             if (instanceCount > 1 && SplitHeifenKey == 0)
@@ -290,14 +298,18 @@ namespace MP3_Auto_Tagger_GUI
                     {"]", ")"},
                     {"OFFICIAL", ""},
                     {"Official", ""},
-                    {"Video)", "|"},
-                    {"video)", "|"}, {" Featuring ", " (ft. "},
+                    {"(Audio)", ""},
+                    {"Video)", ""},
+                    {"video)", ""},
+                    {"(Lyric","" },
+                    { " Featuring ", " (ft. "},
                     {",)", ")"},
                     {" FEAT ", " (FEAT "},
                     {" Feat ", " (FEAT "},
-                    {" feat. ", " (FEAT "},
+                    {" Feat. ", " (FEAT "},
                     {"(Feat.", "(ft."},
                     {"(FEAT", "(feat"},
+                    {"( Music",""},
                     {"(feat", "(ft"},
                     {"FEAT ", "ft"},
                     {"( )", ""},
@@ -307,29 +319,35 @@ namespace MP3_Auto_Tagger_GUI
                     {"(  )", ""},
                     {"FT ", "ft. "},
                     {"Ft ", "ft. "},
+                    {"(Explicit)", ""},
                     {"ft ", "ft. "},
-                    {" FT. ", " (ft. "},
-                    {" FT", " (ft"},
+                    {" Ft. ", " (ft. "},//[ FT. ,  (ft. ]
+                    {" FT. ", " (ft. "},//[ FT. ,  (ft. ]
+                    {" FT", " (ft"},//[ FT,  (ft]
                     {"(FT ", "(ft. "},
                     {" (ft ", " (ft."},
                     {" (Ft ", "(ft. "}
                 };
+
                 while (true)
                 {
                     var reiterate = false;
                     foreach (var vari in replaceList)
                     {
                         if (FileName.ToLower().Contains(vari.Key.ToLower()))
+                        {
                             reiterate = true;
+                        }
                     }
                     if (reiterate)
-                        foreach (
-                            var replaceItem in
-                                replaceList.Where(replaceItem => FileName.ToLower().Contains(replaceItem.Key.ToLower()))
+                        foreach (var replaceItem in replaceList.Where(replaceItem => FileName.ToLower().Contains(replaceItem.Key.ToLower()))
                             )
                         {
-                            FileName = FileName.Replace(replaceItem.Key.ToLower(), replaceItem.Value);
-                            FileName = FileName.Replace(replaceItem.Key, replaceItem.Value);
+                            if (FileName.Contains(replaceItem.Key))
+                                FileName = FileName.Replace(replaceItem.Key, replaceItem.Value);
+                            else
+                                FileName = FileName.Replace(replaceItem.Key.ToLower(), replaceItem.Value);
+
                         }
                     if (reiterate) continue;
                     break;
@@ -337,7 +355,7 @@ namespace MP3_Auto_Tagger_GUI
             }
             catch (Exception ex)
             {
-                
+
             }
         }
 
