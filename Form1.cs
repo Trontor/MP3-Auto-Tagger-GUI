@@ -12,7 +12,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -799,16 +798,16 @@ namespace MP3_Auto_Tagger_GUI
 
         private void ScanShazamTop100()
         {
-            Console("Started Scanning Shazam Charts", Color.CadetBlue); 
+            Console("Started Scanning Shazam Charts", Color.CadetBlue);
             string siteUrl = "http://www.shazam.com/charts/top-100/australia";
             WebView shazamView = WebCore.CreateWebView(1024, 768, WebViewType.Offscreen);
             shazamView.Source = new Uri(siteUrl);
             shazamView.LoadingFrameComplete += (s, e) =>
             {
-                if (e.IsMainFrame && shazamView.Source.ToString().Contains("shazam"))
+                if (e.IsMainFrame)
                 {
                     int foundSounds = 0;
-                    string html = shazamBrowser.HTML;
+                    string html = shazamView.HTML;
                     LoadChartDictionary();
                     var shazamDoc = new HtmlDocument();
                     shazamDoc.LoadHtml(html);
@@ -865,8 +864,7 @@ namespace MP3_Auto_Tagger_GUI
                             both = GetFixedFileName(artist + " - " + title);
                             foundSounds++;
                             Debug.WriteLine(both);
-                            var enumuerable = new List<MusicChart>(_scrapedSongs);
-                            bool isChecked = _chartSongs.Count(str => new DistanceCheck(both, 70).Check(str)) > 0;
+                            var enumuerable = new List<MusicChart>(_scrapedSongs); bool isChecked = _chartSongs.Count(str => new DistanceCheck(both, 70).Check(str)) > 0;
                             if (enumuerable.Any(chart => chart.HasSimilar(both)))
                                 continue;
                             Image img = Properties.Resources.question_sign_on_person_head;
@@ -900,7 +898,7 @@ namespace MP3_Auto_Tagger_GUI
                         if (foundSounds > 0)
                             Console("Finished Scanning Shazam Charts, found:" + foundSounds, Color.Blue);
                     })
-                    {IsBackground = true}.Start();
+                    { IsBackground = true }.Start();
                 }
             };
         }
@@ -925,10 +923,11 @@ namespace MP3_Auto_Tagger_GUI
                     {
                         int foundSounds = 0;
                         string siteXPath = "//*[@id=\"dvChartItems\"]";
-                        if (doc.DocumentNode.SelectSingleNode(siteXPath) == null) 
+                        if (doc.DocumentNode.SelectSingleNode(siteXPath) == null)
                         {
+                            Invoke(new Action(() => Console("Scanning Aria charts failed.", Color.Red)));
                             MessageBox.Show("An error occured while scanning the aria charts :(");
-                            _finishedScanningAria = true; 
+                            _finishedScanningAria = true;
                             return;
                         }
                         var node = (HtmlNode)doc.DocumentNode.SelectSingleNode(siteXPath).ChildNodes.Where(x => x.Name == "table").ToList()[0].ChildNodes.ToList()[1];
@@ -943,9 +942,9 @@ namespace MP3_Auto_Tagger_GUI
                                         string tempPath = Path.GetTempFileName();
                                         if (nodes.ChildNodes.Count < 2)
                                         {
+                                            Invoke(new Action(() => Console("Scanning Aria charts failed.", Color.Red)));
                                             MessageBox.Show("An error occured while scanning the aria charts :(");
                                             _finishedScanningAria = true;
-                                            ariaView.Dispose();
                                             return;
                                         }
                                         string artist = HttpUtility.HtmlDecode(nodes.ChildNodes[1].InnerText);
@@ -1085,7 +1084,7 @@ namespace MP3_Auto_Tagger_GUI
                             Chart.btn_ClearSong.Click += (i, y) =>
                             {
                                 ariaFlow.Controls.Remove(ariaFlow.Controls[ariaFlow.Controls.IndexOf(Chart)]);
-                          if (!_chartSongs.Contains(both)) _chartSongs.Add(both);
+                                if (!_chartSongs.Contains(both)) _chartSongs.Add(both);
                                 SaveChartDictionary();
                             };
                             Chart.btn_Reorder.Click += (i, y) =>
@@ -1432,7 +1431,7 @@ namespace MP3_Auto_Tagger_GUI
             }
         }
 
-        private void metroTabPage1_Click(object sender, EventArgs e)
+        private void TabPage1_Click(object sender, EventArgs e)
         {
         }
 
@@ -1444,15 +1443,6 @@ namespace MP3_Auto_Tagger_GUI
             lblMonitoringDirectory.Text = pathdir;
         }
 
-        //protected override CreateParams CreateParams
-        //{
-        //    get
-        //    {
-        //        CreateParams cp = base.CreateParams;
-        //        cp.ExStyle |= 0x02000000;   // WS_EX_COMPOSITED
-        //        return cp;
-        //    }
-        //}
         private void logInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
@@ -1683,7 +1673,7 @@ namespace MP3_Auto_Tagger_GUI
 
         private void ShazamBrowserLoadingFrameComplete(object sender, FrameEventArgs e)
         {
-           
+
         }
 
         int index = 0;
@@ -1838,18 +1828,13 @@ namespace MP3_Auto_Tagger_GUI
             }
             ScanLocalLyrics();
         }
-
-        private void musixMatchBrowserLoadingFrameComplete(object sender, FrameEventArgs e)
-        {
-        }
-
         private void tmr_ScanCharts_Tick(object sender, EventArgs e)
         {
             shazamBrowser.Reload(false);
             shazamBrowser.Refresh();
             ScanCharts();
         }
- 
+
 
         private void chk_hideCheckedCharts_CheckedChanged(object sender, EventArgs e)
         {
@@ -1857,7 +1842,7 @@ namespace MP3_Auto_Tagger_GUI
         }
 
         private void btn_orderCharts_Click(object sender, EventArgs e)
-        { 
+        {
             SortedList<string, Control> sl = new SortedList<string, Control>();
             foreach (MusicChart i in ariaFlow.Controls)
             {
@@ -1869,7 +1854,7 @@ namespace MP3_Auto_Tagger_GUI
                 {
                 }
             }
-            foreach (MusicChart j in sl.Values)
+            foreach (Control j in sl.Values)
             {
                 ariaFlow.Controls.SetChildIndex(j, ariaFlow.Controls.Count - 1);
             }
@@ -1880,14 +1865,20 @@ namespace MP3_Auto_Tagger_GUI
             PopulateChartLayout();
         }
 
-        private void pnl_chartControls_Paint(object sender, PaintEventArgs e)
+        private void metroButton2_Click(object sender, EventArgs e)
         {
-
+            AnalyseAllFiles();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ariaFlow_SizeChanged(object sender, EventArgs e)
         {
-            MessageBox.Show(Size.ToString());
+            ariaFlow.SuspendLayout();
+            foreach (Control ctrl in ariaFlow.Controls)
+            {
+                if (ctrl is MusicChart)
+                    ctrl.Width = ariaFlow.ClientSize.Width;
+            }
+            ariaFlow.ResumeLayout();
         }
 
         private void ariaFlow_ControlAdded(object sender, ControlEventArgs e)

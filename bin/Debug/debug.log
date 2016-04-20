@@ -4429,3 +4429,109 @@ Parameter name: index
 [0420/211737:INFO:(0)] Running Awesomium 1.7.5.1
 [0420/211850:INFO:(0)] WebCore is now online.
 [0420/211850:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/211907:ERROR:ipc_channel_win.cc(360)] pipe error: 232
+[0420/212005:INFO:(0)] WebCore is now online.
+[0420/212005:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/212149:INFO:(0)] WebCore is now online.
+[0420/212149:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/212332:INFO:(0)] WebCore is now online.
+[0420/212332:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/212357:INFO:(0)] WebCore is now online.
+[0420/212357:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/212516:INFO:(0)] WebCore is now online.
+[0420/212516:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/212608:INFO:(0)] WebCore is now online.
+[0420/212608:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/213043:INFO:(0)] WebCore is now online.
+[0420/213043:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/213255:INFO:(0)] WebCore is now online.
+[0420/213255:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/213613:INFO:(0)] WebCore is now online.
+[0420/213613:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/213718:INFO:(0)] WebCore is now online.
+[0420/213718:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/214225:INFO:(0)] WebCore is now online.
+[0420/214225:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/214330:WARNING:Awesomium.NET(0)] Awesomium.Core.AweInvalidOperationException: The calling thread cannot access this object because a different thread owns it.
+
+
+[0420/215318:INFO:(0)] WebCore is now online.
+[0420/215318:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/225748:INFO:(0)] WebCore is now online.
+[0420/225748:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/225918:INFO:(0)] WebCore is now online.
+[0420/225918:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/230014:INFO:(0)] WebCore is now online.
+[0420/230014:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/230423:INFO:(0)] WebCore is now online.
+[0420/230423:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/230600:INFO:(0)] WebCore is now online.
+[0420/230600:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/230747:INFO:(0)] WebCore is now online.
+[0420/230747:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/230914:INFO:(0)] WebCore is now online.
+[0420/230914:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/231010:INFO:(0)] WebCore is now online.
+[0420/231010:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/231142:INFO:(0)] WebCore is now online.
+[0420/231142:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/231526:INFO:(0)] WebCore is now online.
+[0420/231526:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/231853:INFO:(0)] WebCore is now online.
+[0420/231853:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/231947:INFO:(0)] WebCore is now online.
+[0420/231947:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/232150:INFO:(0)] WebCore is now online.
+[0420/232150:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/232204:INFO:(0)] WebCore is now online.
+[0420/232204:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/232234:INFO:(0)] WebCore is now online.
+[0420/232234:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/232401:WARNING:Awesomium.NET(0)] Awesomium.Core.AweInvalidOperationException: The calling thread cannot access this object because a different thread owns it.
+
+
+[0420/232433:INFO:(0)] WebCore is now online.
+[0420/232433:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/232441:INFO:(0)] WebCore is now online.
+[0420/232441:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/232507:INFO:(0)] WebCore is now online.
+[0420/232507:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/232557:INFO:(0)] WebCore is now online.
+[0420/232557:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/232712:INFO:(0)] WebCore is now online.
+[0420/232712:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/232733:INFO:(0)] WebCore is now online.
+[0420/232733:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/232757:INFO:(0)] WebCore is now online.
+[0420/232757:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/232821:INFO:(0)] WebCore is now online.
+[0420/232821:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/233317:INFO:(0)] WebCore is now online.
+[0420/233317:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/233351:WARNING:Awesomium.NET(0)] Awesomium.Core.AweInvalidOperationException: The calling thread cannot access this object because a different thread owns it.
+
+
+[0420/233502:INFO:(0)] WebCore is now online.
+[0420/233502:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/233819:INFO:(0)] WebCore is now online.
+[0420/233819:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/233828:WARNING:Awesomium.NET(0)] Awesomium.Core.AweInvalidOperationException: The calling thread cannot access this object because a different thread owns it.
+
+
+[0420/233847:INFO:(0)] WebCore is now online.
+[0420/233847:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/234138:INFO:(0)] WebCore is now online.
+[0420/234138:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/234154:ERROR:ipc_channel_win.cc(261)] pipe error: 109
+[0420/234702:INFO:(0)] WebCore is now online.
+[0420/234702:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/234951:INFO:(0)] WebCore is now online.
+[0420/234951:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/235055:INFO:(0)] WebCore is now online.
+[0420/235055:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/235518:INFO:(0)] WebCore is now online.
+[0420/235518:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/235700:INFO:(0)] WebCore is now online.
+[0420/235700:INFO:(0)] Running Awesomium 1.7.5.1
+[0420/235951:INFO:(0)] WebCore is now online.
+[0420/235951:INFO:(0)] Running Awesomium 1.7.5.1

@@ -46,6 +46,9 @@
     <OutputPath>bin\x64\Release\</OutputPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>MP3_Auto_Tagger_GUI.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Awesomium.Core, Version=1.7.5.1, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -88,6 +91,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BetterFlowLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="LyricsDisplay.cs">
       <SubType>Form</SubType>
     </Compile>
