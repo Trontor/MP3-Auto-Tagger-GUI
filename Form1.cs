@@ -126,7 +126,7 @@ namespace MP3_Auto_Tagger_GUI
                 xElem2 = XElement.Load(path_chartSongs);
             else
                 xElem2.Save(path_chartSongs);
-            _chartSongs = xElem2.Descendants("item").Select(x => x.Value).ToList();
+            _chartSongs = xElem2.Descendants("item").Select(x => HttpUtility.HtmlDecode(x.Value)).ToList();
         }
 
         private static List<string> _lyricsException = new List<string>();
@@ -864,8 +864,9 @@ namespace MP3_Auto_Tagger_GUI
                             both = GetFixedFileName(artist + " - " + title);
                             foundSounds++;
                             Debug.WriteLine(both);
-                            var enumuerable = new List<MusicChart>(_scrapedSongs); bool isChecked = _chartSongs.Count(str => new DistanceCheck(both, 70).Check(str)) > 0;
-                            if (enumuerable.Any(chart => chart.HasSimilar(both)))
+                            var enumuerable = new List<MusicChart>(_scrapedSongs);
+                            bool isChecked = _chartSongs.Count(str => new SimilarityCheck(title, str.Split('-')[1]).Percentage() > 70) > 0;
+                            if (enumuerable.Any(chart => chart.ChartHasSimilar(both)))
                                 continue;
                             Image img = Properties.Resources.question_sign_on_person_head;
                             using (var imgClient = new WebClient())
@@ -948,15 +949,16 @@ namespace MP3_Auto_Tagger_GUI
                                             return;
                                         }
                                         string artist = HttpUtility.HtmlDecode(nodes.ChildNodes[1].InnerText);
-                                        string title = HttpUtility.HtmlDecode(nodes.ChildNodes[0].InnerText);
+                                        string title = HttpUtility.HtmlDecode(nodes.ChildNodes[0].InnerText);        
                                         foundSounds++;
                                         string both = GetFixedFileName(artist + " - " + title);
                                         Debug.WriteLine("Aria:" + both);
                                         var enumuerable = new List<MusicChart>(_scrapedSongs);
-                                        bool isChecked = _chartSongs.Count(str => new DistanceCheck(both, 70).Check(str)) > 0;
+                                        var strred = new List<string>();    
+                                        bool isChecked = _chartSongs.Count(str => new SimilarityCheck(title, GetFixedFileName(str).Split('-')[1]).Percentage() > 70) > 0;
                                         if (!isChecked)
                                             MessageBox.Show(both + "aria");
-                                        if (enumuerable.Any(chart => chart.HasSimilar(both))) continue;
+                                        if (enumuerable.Any(chart => chart.ChartHasSimilar(both))) continue;
                                         foreach (var cNode in itemRow.ChildNodes.Where(x => x.FirstChild != null && x.FirstChild.Name == "img"))
                                         {
                                             {
@@ -1003,6 +1005,11 @@ namespace MP3_Auto_Tagger_GUI
             };
         }
 
+        private void FailedBillboardHot100()
+        {
+            _finishedScanningBillboard = true;
+            Console("Failed to Scan the Billboard Hot 100", Color.Red);
+        }
         private void ScanBillboardHot100()
         {
             string siteUrl = "http://www.billboard.com/charts/hot-100";
@@ -1030,31 +1037,36 @@ namespace MP3_Auto_Tagger_GUI
                                         d.Attributes["class"].Value.Contains("chart-row"));
                         foreach (var eleArticle in node.Take(50))
                         {
-                            HtmlNode eleChartrowPrimary = eleArticle.SelectSingleNode("div[1]");
-                            HtmlNode eleChartrowtitle = eleChartrowPrimary.SelectSingleNode(@"div[@class='chart-row__container']/div[@class='chart-row__title']");
-                            HtmlNode eleImage = eleChartrowPrimary.SelectSingleNode(@"div[@class='chart-row__image']");
+                            HtmlNode eleChartRowMainDisplay = eleArticle.SelectSingleNode("div[1]/div[@class='chart-row__main-display']");
+                            HtmlNode eleChartRowTitle = eleChartRowMainDisplay.SelectSingleNode(@"div[@class='chart-row__container']/div[@class='chart-row__title']");
+                            HtmlNode eleImage = eleChartRowMainDisplay.SelectSingleNode(@"div[@class='chart-row__image']");
 
                             string tempPath = Path.GetTempFileName();
                             string artist;
-                            if (eleChartrowtitle.SelectSingleNode("h3[1]").ChildNodes.Count > 1)
+                            if (eleChartRowTitle == null)
+                            {
+                                FailedBillboardHot100();
+                                return;
+                            }
+                            if (eleChartRowTitle.SelectSingleNode(@"*[@class='chart-row__artist']") != null)
                                 artist =
                                     HttpUtility.HtmlDecode(
-                                        eleChartrowtitle.SelectSingleNode("h3[1]")
-                                            .SelectSingleNode("a")
+                                        eleChartRowTitle.SelectSingleNode(@"*[@class='chart-row__artist']")
                                             .InnerText.Replace("\n", "")
                                             .Trim());
-                            else
-                                artist =
-                                    HttpUtility.HtmlDecode(
-                                        eleChartrowtitle.SelectSingleNode("h3[1]").InnerText.Replace("\n", "").Trim());
+                            else return;
+                            //else
+                            //    artist =
+                            //        HttpUtility.HtmlDecode(
+                            //            eleChartrowtitle.SelectSingleNode("h3[1]").InnerText.Replace("\n", "").Trim());
                             string title =
                                 HttpUtility.HtmlDecode(
-                                    eleChartrowtitle.SelectSingleNode("h2[1]").InnerText.Replace("\n", "").Trim());
+                                    eleChartRowTitle.SelectSingleNode(@"*[@class='chart-row__song']").InnerText.Replace("\n", "").Trim());
                             string both = GetFixedFileName(artist + " - " + title);
                             foundSounds++;
                             var enumuerable = new List<MusicChart>(_scrapedSongs);
-                            bool isChecked = _chartSongs.Count(str => new DistanceCheck(both, 70).Check(str)) > 0;
-                            if (enumuerable.Any(chart => chart.HasSimilar(both)))
+                            bool isChecked = _chartSongs.Count(str => new SimilarityCheck(title, str.Split('-')[1]).Percentage() > 70) > 0;
+                            if (enumuerable.Any(chart => chart.ChartHasSimilar(both)))
                                 continue;
                             Image img = Properties.Resources.question_sign_on_person_head;
                             if (eleImage.Attributes.Count > 1)
@@ -1199,9 +1211,12 @@ namespace MP3_Auto_Tagger_GUI
                       SetSubstatus(_files.Length + " song files processed succesfully.", Status.Good);
                       lbl_Percentage.Visible = false;
                       metroProgressSpinner1.Visible = false;
-                      pnlProcess.Visible = false;
-                      panelControls.Visible = true;
-                      pnlOutcome.Visible = true;
+                      Invoke(new Action(() =>
+                      {
+                          pnlProcess.Visible = false;
+                          panelControls.Visible = true;
+                          pnlOutcome.Visible = true;
+                      }));
                       focusMe.Focus();
                       ScanLocalLyrics();
                   }));
@@ -1238,7 +1253,10 @@ namespace MP3_Auto_Tagger_GUI
 
         private void NotificationIcon_Click(object sender, EventArgs e)
         {
-            Invoke(new Action(() => WindowState = FormWindowState.Normal));
+            Invoke(new Action(() =>
+            {
+                WindowState = FormWindowState.Normal;
+            }));
         }
 
         public void Space()
@@ -1500,7 +1518,7 @@ namespace MP3_Auto_Tagger_GUI
 
         public string GetFixedFileName(string name)
         {
-            return new TrontorMP3File(name).MetaFixFilename().Trim();
+            return new TrontorMP3File(name).MetaFixFilename(false).Trim();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -1743,7 +1761,7 @@ namespace MP3_Auto_Tagger_GUI
                     {
                         return;
                     }
-                    var levehCheck = new DistanceCheck(fixFname.ToLower(), 70).Check(title.ToLower()) || new DistanceCheck(Path.GetFileNameWithoutExtension(songsWithoutLyrics[index]).ToLower(), 70).Check(title.ToLower());
+                    var levehCheck = new SimilarityCheck(fixFname.ToLower(), title.ToLower()).Percentage() > 70 || new SimilarityCheck(Path.GetFileNameWithoutExtension(songsWithoutLyrics[index]), title.ToLower()).Percentage() > 70;
                     if (levehCheck || MessageBox.Show("Does this look like the right title?" + Environment.NewLine + Path.GetFileNameWithoutExtension(songsWithoutLyrics[index]) + Environment.NewLine + title, "Lyric Verification", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         WebView lyricsPageBrowserLocal = WebCore.CreateWebView(1024, 768, WebViewType.Offscreen);

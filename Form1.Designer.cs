@@ -641,10 +641,10 @@ namespace MP3_Auto_Tagger_GUI
             // 
             this.logBox.BackColor = System.Drawing.Color.White;
             this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.logBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.logBox.Location = new System.Drawing.Point(0, 0);
             this.logBox.Name = "logBox";
-            this.logBox.Size = new System.Drawing.Size(652, 394);
+            this.logBox.Size = new System.Drawing.Size(652, 372);
             this.logBox.TabIndex = 2;
             this.logBox.Text = "";
             // 
@@ -772,6 +772,7 @@ namespace MP3_Auto_Tagger_GUI
             this.MinimumSize = new System.Drawing.Size(700, 500);
             this.Name = "Form1";
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.DropShadow;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Rohyl\'s Personal MP3 File Manager";
             this.Activated += new System.EventHandler(this.Form1_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
