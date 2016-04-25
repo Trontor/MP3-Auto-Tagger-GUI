@@ -99,7 +99,14 @@ namespace MP3_Auto_Tagger_GUI
         public bool ChartHasSimilar(string comparisonStr)
         {
             string s = new TrontorMP3File(lbl_Artist.Text + " - " + lbl_Title.Text).MetaFixFilename(false).Trim();
-            return new SimilarityCheck(comparisonStr, s).Percentage() > 70;
+            var splitParts = s.Split('-'); 
+            var Percentage = 0;
+            Percentage = splitParts.Length > 2
+                ? Math.Max(new SimilarityCheck(comparisonStr, splitParts[1]).Percentage(),
+                    new SimilarityCheck(comparisonStr, splitParts[2]).Percentage())
+                : new SimilarityCheck(comparisonStr, splitParts[1]).Percentage();
+
+            return Percentage > 70;
         }
 
         private void btn_LoadVideo_Click(object sender, EventArgs e)
@@ -113,15 +120,43 @@ namespace MP3_Auto_Tagger_GUI
         int maxDistance;
         string s1;
         string s2;
-        public SimilarityCheck(string s1, string s2)
+        bool _SplitHeifenAndReturnLargest = false;
+        public SimilarityCheck(string s1, string s2, bool SplitF2andReturnLargest = false)
         {
             this.s1 = s1.ToLower().Trim();
             this.s2 = s2.ToLower().Trim();
+            _SplitHeifenAndReturnLargest = SplitF2andReturnLargest;
         }
 
         public int Percentage()
         {
-            if ((s1.Length > 5 && s1.Contains(s2)) || ( s2.Length > 5 && s2.Contains(s1)))
+            var splitParts = s2.Split('-');
+            var Percentage = 0;
+            if (splitParts.Length > 2)
+            {
+                s2 = splitParts[1];
+                if (CalculatePercentage() > Percentage)
+                    Percentage = CalculatePercentage();
+                s2 = splitParts[2];
+                if (CalculatePercentage() > Percentage)
+                    Percentage = CalculatePercentage();
+            }
+            else if (splitParts.Length == 1)
+            {
+                return CalculatePercentage();
+            }
+            else
+            {
+                s2 = splitParts[1];
+                if (CalculatePercentage() > Percentage)
+                    Percentage = CalculatePercentage();
+            }
+            return Percentage; 
+        }
+
+        public int CalculatePercentage()
+        {
+            if ((s1.Length > 5 && s1.Contains(s2)) || (s2.Length > 5 && s2.Contains(s1)))
                 return 100;
             int n = s1.Length;
             int m = s2.Length;
@@ -164,8 +199,8 @@ namespace MP3_Auto_Tagger_GUI
             }
             // Step 7
             int bigger = Math.Max(s1.Length, s2.Length);
-            double pct = ((double)(bigger - d[n, m]) /bigger) * 100;
-          //  Debug.WriteLine(s1 + " " + s2 + (int) pct);
+            double pct = ((double)(bigger - d[n, m]) / bigger) * 100;
+            //  Debug.WriteLine(s1 + " " + s2 + (int) pct);
             return (int)pct;
         }
     }

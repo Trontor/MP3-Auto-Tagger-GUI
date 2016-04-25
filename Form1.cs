@@ -45,8 +45,20 @@ namespace MP3_Auto_Tagger_GUI
         public Form1()
         {
             InitializeComponent();
+            BackColor = Color.Lime;
+            TransparencyKey = Color.Lime;
+            SetStyle(ControlStyles.ResizeRedraw, true);
+            this.StartPosition = FormStartPosition.Manual;
+            this.Top = (Screen.PrimaryScreen.Bounds.Height - this.Height) / 2;
+            this.Left = (Screen.PrimaryScreen.Bounds.Width - this.Width) / 2;
             ChangeMonitorPath(_path);
             songsWithoutLyrics = new List<string>();
+        }
+
+        public sealed override Color BackColor
+        {
+            get { return base.BackColor; }
+            set { base.BackColor = value; }
         }
 
         enum Status
@@ -739,13 +751,13 @@ namespace MP3_Auto_Tagger_GUI
             var information = LyricInformation();
             for (int i = 0; i < information.Count; i++)
             {
+                
                 lyricsView.Rows.Add(Path.GetFileNameWithoutExtension(information[i].First), information[i].Second,
                     information[i].Third, information[i].Fourth);
                 if (information[i].Second == "Yes")
                     lyricsView.Rows[i].Cells[1].Style.BackColor = Color.Green;
                 else
                     lyricsView.Rows[i].Cells[1].Style.BackColor = Color.Firebrick;
-
             }
             foreach (DataGridViewColumn col in lyricsView.Columns)
             {
@@ -758,7 +770,7 @@ namespace MP3_Auto_Tagger_GUI
         }
 
         private bool _finishedScanningAria, _finishedScanningBillboard, _finishedScanningShazam;
-
+        bool showBalloon = true;
         private void PopulateChartLayout()
         {
             ariaFlow.Controls.Clear();
@@ -766,9 +778,23 @@ namespace MP3_Auto_Tagger_GUI
             {
                 if (chk_hideCheckedCharts.Checked && chart.Checked) continue;
                 ariaFlow.Controls.Add(chart);
-
+            }
+            if (showBalloon)
+            {
+                new Thread(() =>
+                {
+                    foreach (MusicChart c in _scrapedSongs)
+                        if (!c.Checked)
+                        {
+                            NotificationIcon.ShowBalloonTip(5000, "New Song", c.lbl_Artist.Text + " - " + c.lbl_Title.Text,
+                                ToolTipIcon.Info);
+                            Thread.Sleep(5000);
+                        }
+                }).Start();
+                showBalloon = false;
             }
         }
+
         private void ScanCharts()
         {
             _finishedScanningAria = false;
@@ -865,8 +891,8 @@ namespace MP3_Auto_Tagger_GUI
                             foundSounds++;
                             Debug.WriteLine(both);
                             var enumuerable = new List<MusicChart>(_scrapedSongs);
-                            bool isChecked = _chartSongs.Count(str => new SimilarityCheck(title, str.Split('-')[1]).Percentage() > 70) > 0;
-                            if (enumuerable.Any(chart => chart.ChartHasSimilar(both)))
+                            bool isChecked = _chartSongs.Count(str => new SimilarityCheck(title, str, true).Percentage() > 70) > 0;
+                            if (enumuerable.Any(chart => chart.ChartHasSimilar(title)))
                                 continue;
                             Image img = Properties.Resources.question_sign_on_person_head;
                             using (var imgClient = new WebClient())
@@ -887,9 +913,10 @@ namespace MP3_Auto_Tagger_GUI
                             Chart.Size = new Size(ariaFlow.Size.Width - 25, Chart.Height);
                             Chart.btn_ClearSong.Click += (i, y) =>
                             {
-                                ariaFlow.Controls.Remove(ariaFlow.Controls[ariaFlow.Controls.IndexOf(Chart)]);
+                                _scrapedSongs.Remove((MusicChart)ariaFlow.Controls[ariaFlow.Controls.IndexOf(Chart)]);
                                 if (!_chartSongs.Contains(both)) _chartSongs.Add(both);
                                 SaveChartDictionary();
+                                PopulateChartLayout();
                             };
                             Chart.btn_Reorder.Click +=
                                 (i, y) => { ariaFlow.Controls.SetChildIndex(Chart, ariaFlow.Controls.Count - 1); };
@@ -949,16 +976,15 @@ namespace MP3_Auto_Tagger_GUI
                                             return;
                                         }
                                         string artist = HttpUtility.HtmlDecode(nodes.ChildNodes[1].InnerText);
-                                        string title = HttpUtility.HtmlDecode(nodes.ChildNodes[0].InnerText);        
+                                        string title = HttpUtility.HtmlDecode(nodes.ChildNodes[0].InnerText);
                                         foundSounds++;
                                         string both = GetFixedFileName(artist + " - " + title);
                                         Debug.WriteLine("Aria:" + both);
                                         var enumuerable = new List<MusicChart>(_scrapedSongs);
-                                        var strred = new List<string>();    
-                                        bool isChecked = _chartSongs.Count(str => new SimilarityCheck(title, GetFixedFileName(str).Split('-')[1]).Percentage() > 70) > 0;
-                                        if (!isChecked)
-                                            MessageBox.Show(both + "aria");
-                                        if (enumuerable.Any(chart => chart.ChartHasSimilar(both))) continue;
+                                        var strred = new List<string>();
+                                        bool isChecked = _chartSongs.Count(str => new SimilarityCheck(title, GetFixedFileName(str), true).Percentage() > 70) > 0;
+
+                                        if (enumuerable.Any(chart => chart.ChartHasSimilar(title))) continue;
                                         foreach (var cNode in itemRow.ChildNodes.Where(x => x.FirstChild != null && x.FirstChild.Name == "img"))
                                         {
                                             {
@@ -983,9 +1009,10 @@ namespace MP3_Auto_Tagger_GUI
                                         Chart.Size = new Size(ariaFlow.Size.Width - 25, Chart.Height);
                                         Chart.btn_ClearSong.Click += (i, y) =>
                                         {
-                                            ariaFlow.Controls.Remove(ariaFlow.Controls[ariaFlow.Controls.IndexOf(Chart)]);
+                                            _scrapedSongs.Remove((MusicChart)ariaFlow.Controls[ariaFlow.Controls.IndexOf(Chart)]);
                                             if (!_chartSongs.Contains(both)) _chartSongs.Add(both);
                                             SaveChartDictionary();
+                                            PopulateChartLayout();
                                         };
                                         Chart.btn_Reorder.Click += (i, y) =>
                                         {
@@ -1010,6 +1037,7 @@ namespace MP3_Auto_Tagger_GUI
             _finishedScanningBillboard = true;
             Console("Failed to Scan the Billboard Hot 100", Color.Red);
         }
+
         private void ScanBillboardHot100()
         {
             string siteUrl = "http://www.billboard.com/charts/hot-100";
@@ -1065,8 +1093,8 @@ namespace MP3_Auto_Tagger_GUI
                             string both = GetFixedFileName(artist + " - " + title);
                             foundSounds++;
                             var enumuerable = new List<MusicChart>(_scrapedSongs);
-                            bool isChecked = _chartSongs.Count(str => new SimilarityCheck(title, str.Split('-')[1]).Percentage() > 70) > 0;
-                            if (enumuerable.Any(chart => chart.ChartHasSimilar(both)))
+                            bool isChecked = _chartSongs.Count(str => new SimilarityCheck(title, str, true).Percentage() > 70) > 0;
+                            if (enumuerable.Any(chart => chart.ChartHasSimilar(title)))
                                 continue;
                             Image img = Properties.Resources.question_sign_on_person_head;
                             if (eleImage.Attributes.Count > 1)
@@ -1095,9 +1123,10 @@ namespace MP3_Auto_Tagger_GUI
                             Chart.Size = new Size(ariaFlow.Size.Width - 25, Chart.Height);
                             Chart.btn_ClearSong.Click += (i, y) =>
                             {
-                                ariaFlow.Controls.Remove(ariaFlow.Controls[ariaFlow.Controls.IndexOf(Chart)]);
+                                _scrapedSongs.Remove((MusicChart)ariaFlow.Controls[ariaFlow.Controls.IndexOf(Chart)]);
                                 if (!_chartSongs.Contains(both)) _chartSongs.Add(both);
                                 SaveChartDictionary();
+                                PopulateChartLayout();
                             };
                             Chart.btn_Reorder.Click += (i, y) =>
                             {
@@ -1255,7 +1284,9 @@ namespace MP3_Auto_Tagger_GUI
         {
             Invoke(new Action(() =>
             {
-                WindowState = FormWindowState.Normal;
+                WindowState = WindowState == FormWindowState.Normal ? FormWindowState.Minimized : FormWindowState.Normal;
+                if (WindowState == FormWindowState.Normal) 
+                Activate();
             }));
         }
 
@@ -1615,7 +1646,7 @@ namespace MP3_Auto_Tagger_GUI
 
         private void Form1_Activated(object sender, EventArgs e)
         {
-            Invalidate();
+            //Invalidate();
             //  CenterToScreen();
         }
 
@@ -1623,10 +1654,6 @@ namespace MP3_Auto_Tagger_GUI
         {
             pnl_searchingCharts.Visible = true;
             ScanCharts();
-        }
-
-        private void lyricsView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
         }
 
         private void lyricsView_MouseDown(object sender, MouseEventArgs e)
@@ -1761,7 +1788,7 @@ namespace MP3_Auto_Tagger_GUI
                     {
                         return;
                     }
-                    var levehCheck = new SimilarityCheck(fixFname.ToLower(), title.ToLower()).Percentage() > 70 || new SimilarityCheck(Path.GetFileNameWithoutExtension(songsWithoutLyrics[index]), title.ToLower()).Percentage() > 70;
+                    var levehCheck = new SimilarityCheck(title.ToLower(), fixFname.ToLower(), true).Percentage() > 70 || new SimilarityCheck(title.ToLower(), Path.GetFileNameWithoutExtension(songsWithoutLyrics[index]), true).Percentage() > 70;
                     if (levehCheck || MessageBox.Show("Does this look like the right title?" + Environment.NewLine + Path.GetFileNameWithoutExtension(songsWithoutLyrics[index]) + Environment.NewLine + title, "Lyric Verification", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         WebView lyricsPageBrowserLocal = WebCore.CreateWebView(1024, 768, WebViewType.Offscreen);
@@ -1846,13 +1873,11 @@ namespace MP3_Auto_Tagger_GUI
             }
             ScanLocalLyrics();
         }
+
         private void tmr_ScanCharts_Tick(object sender, EventArgs e)
         {
-            shazamBrowser.Reload(false);
-            shazamBrowser.Refresh();
             ScanCharts();
         }
-
 
         private void chk_hideCheckedCharts_CheckedChanged(object sender, EventArgs e)
         {
