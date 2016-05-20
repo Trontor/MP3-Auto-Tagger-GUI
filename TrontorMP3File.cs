@@ -10,7 +10,7 @@ using File = System.IO.File;
 
 namespace MP3_Auto_Tagger_GUI
 {
-    public class TrontorMP3File
+    public class TrontorMp3File
     {
 
         private readonly List<string> _artists = new List<string>();
@@ -20,7 +20,7 @@ namespace MP3_Auto_Tagger_GUI
         public bool ReverseSplitHeifen;
         public string FilePath { get; set; }
         public string FileName { get; set; }
-        private bool MetaFileSplitHeifen = false;
+        private bool _metaFileSplitHeifen = false;
         private string _fileNameNoAttachedArtists;
         public string BaseArtist { get; set; }
 
@@ -34,11 +34,11 @@ namespace MP3_Auto_Tagger_GUI
             get { return PartOfFileName(FileName, false); }
         }
 
-        private static RichTextBox main_LogBox = null;
+        private static RichTextBox _mainLogBox = null;
 
-        private static MetroTextBox main_InputBox = null;
+        private static MetroTextBox _mainInputBox = null;
 
-        public TrontorMP3File(string filePath)
+        public TrontorMp3File(string filePath)
         {
             FilePath = filePath;
         }
@@ -50,28 +50,28 @@ namespace MP3_Auto_Tagger_GUI
 
         public static void ColoredConsoleWrite(Color c, string text, bool writeOnly = false)
         {
-            Color originalColor = main_LogBox.ForeColor;
-            main_LogBox.ForeColor = c;
+            Color originalColor = _mainLogBox.ForeColor;
+            _mainLogBox.ForeColor = c;
             if (writeOnly)
-                main_LogBox.AppendText(text);
+                _mainLogBox.AppendText(text);
             else
-                main_LogBox.AppendText(Environment.NewLine + text);
-            main_LogBox.ForeColor = originalColor;
+                _mainLogBox.AppendText(Environment.NewLine + text);
+            _mainLogBox.ForeColor = originalColor;
         }
 
         public int SplitHeifenKey { get; set; }
 
-        private static Dictionary<string, string> dictionary_FileName = new Dictionary<string, string>();
+        private static Dictionary<string, string> _dictionaryFileName = new Dictionary<string, string>();
         
-        private static string path_chartSongs = Path.Combine(Form1.path_programData, "MP3FileNameConfig.xml"); 
+        private static string _pathChartSongs = Path.Combine(Form1.PathProgramData, "MP3FileNameConfig.xml"); 
         private static void LoadDictionary()
         {
             var xElem2 = new XElement("items");
-            if (File.Exists(path_chartSongs))
-                xElem2 = XElement.Load(path_chartSongs);
+            if (File.Exists(_pathChartSongs))
+                xElem2 = XElement.Load(_pathChartSongs);
             else
-                xElem2.Save(path_chartSongs);
-            dictionary_FileName = xElem2.Descendants("item")
+                xElem2.Save(_pathChartSongs);
+            _dictionaryFileName = xElem2.Descendants("item")
                 .ToDictionary(x => (string)x.Attribute("key"), x => (string)x.Attribute("value"));
         }
 
@@ -79,16 +79,16 @@ namespace MP3_Auto_Tagger_GUI
         {
             var xElem = new XElement(
                 "items",
-                dictionary_FileName.Select(
+                _dictionaryFileName.Select(
                     x => new XElement("item", new XAttribute("key", x.Key), new XAttribute("value", x.Value)))
                 );
             string xml = xElem.ToString();
-            xElem.Save(path_chartSongs);
+            xElem.Save(_pathChartSongs);
         }
 
         public string MetaFixFilename(bool attachArtists = true)
         {
-            MetaFileSplitHeifen = true;
+            _metaFileSplitHeifen = true;
             if (FilePath == null) throw new ArgumentNullException("path");
             if (File.Exists(FilePath))
                 FileName = Path.GetFileName(FilePath).Replace(".mp3", "");
@@ -108,7 +108,7 @@ namespace MP3_Auto_Tagger_GUI
 
         }
 
-        public string FixFileName(bool WriteID3Tags = true)
+        public string FixFileName(bool writeId3Tags = true)
         {
             LoadDictionary();
             if (FilePath == null) throw new ArgumentNullException("path");
@@ -122,11 +122,11 @@ namespace MP3_Auto_Tagger_GUI
             CompleteFeaturingBrackets();
             ExtractArtists();
             AttachFeaturedArtists();
-            if (WriteID3Tags)
+            if (writeId3Tags)
                 WriteId3Tags();
 
-            if (SplitHeifenKey > 0 && !dictionary_FileName.ContainsKey(FileName))
-                dictionary_FileName.Add(FileName, SplitHeifenKey.ToString());
+            if (SplitHeifenKey > 0 && !_dictionaryFileName.ContainsKey(FileName))
+                _dictionaryFileName.Add(FileName, SplitHeifenKey.ToString());
 
             SaveDictionary();
             return FileName;
@@ -243,12 +243,12 @@ namespace MP3_Auto_Tagger_GUI
         private string PartOfFileName(string s, bool first)
         {
             int savedSplitHeifen;
-            if (dictionary_FileName.ContainsKey(FileName) && int.TryParse(dictionary_FileName[FileName], out savedSplitHeifen))
+            if (_dictionaryFileName.ContainsKey(FileName) && int.TryParse(_dictionaryFileName[FileName], out savedSplitHeifen))
                 SplitHeifenKey = savedSplitHeifen;
             int instanceCount = s.Count(f => f == '-');
             if (instanceCount > 1 && SplitHeifenKey == 0)
             {
-                if (!MetaFileSplitHeifen)
+                if (!_metaFileSplitHeifen)
                 {
                     var notReplaced = true;
                     while (notReplaced)
@@ -295,10 +295,13 @@ namespace MP3_Auto_Tagger_GUI
                 {
                     {"[", "("},
                     {"]", ")"},
+                    {"(Official Audio)", ""},
+                    {"(Audio)", ""},
                     {"OFFICIAL", ""},
                     {"Official", ""},
-                    {"(Audio)", ""},
+                    {"(Video)", ""},
                     {"Video)", ""},
+                    {"(video)", ""},
                     {"video)", ""},
                     {"(Lyric","" },
                     { " Featuring ", " (ft. "},

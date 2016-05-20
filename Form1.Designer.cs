@@ -32,9 +32,9 @@ namespace MP3_Auto_Tagger_GUI
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             this.shazamBrowser = new Awesomium.Windows.Forms.WebControl(this.components);
             this.tmr_ScanCharts = new System.Windows.Forms.Timer(this.components);
             this.lblMonitoringDirectory = new System.Windows.Forms.Label();
@@ -66,27 +66,28 @@ namespace MP3_Auto_Tagger_GUI
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.pnl_chartControls = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.lbl_chartCount = new System.Windows.Forms.Label();
+            this.btn_orderBySeen = new System.Windows.Forms.Button();
             this.chk_hideCheckedCharts = new MetroFramework.Controls.MetroCheckBox();
+            this.lbl_chartCount = new System.Windows.Forms.Label();
             this.btn_orderCharts = new System.Windows.Forms.Button();
             this.btn_refreshCharts = new System.Windows.Forms.Button();
             this.pnl_searchingCharts = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.lbl_chartProgress = new MetroFramework.Controls.MetroLabel();
+            this._chartSongsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.TabPage5 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.logInput = new MetroFramework.Controls.MetroTextBox();
             this.logBox = new System.Windows.Forms.RichTextBox();
-            this.TabPage2 = new System.Windows.Forms.TabPage();
-            this.browserLayouts = new System.Windows.Forms.FlowLayoutPanel();
-            this.lyricsBrowser = new Awesomium.Windows.Forms.WebControl(this.components);
             this.TabPage6 = new System.Windows.Forms.TabPage();
             this.lyricsView = new System.Windows.Forms.DataGridView();
-            this.ariaFlow = new MP3_Auto_Tagger_GUI.BetterFlowLayout();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clm_LyricStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clm_ShowLyrics = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clm_LastMod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btn_chooseFolder = new MetroFramework.Controls.MetroButton();
+            this.lyricsBrowser = new Awesomium.Windows.Forms.WebControl(this.components);
             this.tabControl.SuspendLayout();
             this.TabPage1.SuspendLayout();
             this.pnlOutcome.SuspendLayout();
@@ -106,8 +107,7 @@ namespace MP3_Auto_Tagger_GUI
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.TabPage5.SuspendLayout();
-            this.TabPage2.SuspendLayout();
-            this.browserLayouts.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.TabPage6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lyricsView)).BeginInit();
             this.SuspendLayout();
@@ -123,7 +123,7 @@ namespace MP3_Auto_Tagger_GUI
             // tmr_ScanCharts
             // 
             this.tmr_ScanCharts.Enabled = true;
-            this.tmr_ScanCharts.Interval = 600000;
+            this.tmr_ScanCharts.Interval = 3600000;
             this.tmr_ScanCharts.Tick += new System.EventHandler(this.tmr_ScanCharts_Tick);
             // 
             // lblMonitoringDirectory
@@ -154,7 +154,6 @@ namespace MP3_Auto_Tagger_GUI
             this.tabControl.Controls.Add(this.TabPage3);
             this.tabControl.Controls.Add(this.TabPage4);
             this.tabControl.Controls.Add(this.TabPage5);
-            this.tabControl.Controls.Add(this.TabPage2);
             this.tabControl.Controls.Add(this.TabPage6);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(20, 60);
@@ -429,7 +428,7 @@ namespace MP3_Auto_Tagger_GUI
             this.TabPage4.Controls.Add(this.pnl_EmptyCharts);
             this.TabPage4.Controls.Add(this.pnl_chartControls);
             this.TabPage4.Controls.Add(this.pnl_searchingCharts);
-            this.TabPage4.Controls.Add(this.ariaFlow);
+            this.TabPage4.Controls.Add(this._chartSongsPanel);
             this.TabPage4.Location = new System.Drawing.Point(4, 22);
             this.TabPage4.Name = "TabPage4";
             this.TabPage4.Size = new System.Drawing.Size(652, 394);
@@ -487,13 +486,15 @@ namespace MP3_Auto_Tagger_GUI
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
-            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnCount = 5;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 136F));
+            this.tableLayoutPanel1.Controls.Add(this.btn_orderBySeen, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.chk_hideCheckedCharts, 4, 0);
             this.tableLayoutPanel1.Controls.Add(this.lbl_chartCount, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.chk_hideCheckedCharts, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.btn_orderCharts, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.btn_refreshCharts, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -505,16 +506,16 @@ namespace MP3_Auto_Tagger_GUI
             this.tableLayoutPanel1.Size = new System.Drawing.Size(652, 32);
             this.tableLayoutPanel1.TabIndex = 19;
             // 
-            // lbl_chartCount
+            // btn_orderBySeen
             // 
-            this.lbl_chartCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_chartCount.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_chartCount.Location = new System.Drawing.Point(3, 0);
-            this.lbl_chartCount.Name = "lbl_chartCount";
-            this.lbl_chartCount.Size = new System.Drawing.Size(157, 32);
-            this.lbl_chartCount.TabIndex = 19;
-            this.lbl_chartCount.Text = "0";
-            this.lbl_chartCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btn_orderBySeen.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btn_orderBySeen.Location = new System.Drawing.Point(148, 4);
+            this.btn_orderBySeen.Name = "btn_orderBySeen";
+            this.btn_orderBySeen.Size = new System.Drawing.Size(90, 23);
+            this.btn_orderBySeen.TabIndex = 22;
+            this.btn_orderBySeen.Text = "Order Seen";
+            this.btn_orderBySeen.UseVisualStyleBackColor = true;
+            this.btn_orderBySeen.Click += new System.EventHandler(this.btn_orderBySeen_Click);
             // 
             // chk_hideCheckedCharts
             // 
@@ -522,18 +523,30 @@ namespace MP3_Auto_Tagger_GUI
             this.chk_hideCheckedCharts.AutoSize = true;
             this.chk_hideCheckedCharts.Checked = true;
             this.chk_hideCheckedCharts.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chk_hideCheckedCharts.Location = new System.Drawing.Point(504, 8);
+            this.chk_hideCheckedCharts.Location = new System.Drawing.Point(519, 8);
             this.chk_hideCheckedCharts.Name = "chk_hideCheckedCharts";
-            this.chk_hideCheckedCharts.Size = new System.Drawing.Size(132, 15);
-            this.chk_hideCheckedCharts.TabIndex = 15;
+            this.chk_hideCheckedCharts.Size = new System.Drawing.Size(130, 15);
+            this.chk_hideCheckedCharts.TabIndex = 21;
             this.chk_hideCheckedCharts.Text = "Hide Checked Songs";
             this.chk_hideCheckedCharts.UseSelectable = true;
-            this.chk_hideCheckedCharts.Click += new System.EventHandler(this.chk_hideCheckedCharts_CheckedChanged);
+            this.chk_hideCheckedCharts.CheckedChanged += new System.EventHandler(this.chk_hideCheckedCharts_CheckedChanged);
+            this.chk_hideCheckedCharts.CheckStateChanged += new System.EventHandler(this.chk_hideCheckedCharts_CheckStateChanged);
+            // 
+            // lbl_chartCount
+            // 
+            this.lbl_chartCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbl_chartCount.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_chartCount.Location = new System.Drawing.Point(3, 0);
+            this.lbl_chartCount.Name = "lbl_chartCount";
+            this.lbl_chartCount.Size = new System.Drawing.Size(123, 32);
+            this.lbl_chartCount.TabIndex = 19;
+            this.lbl_chartCount.Text = "0";
+            this.lbl_chartCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btn_orderCharts
             // 
             this.btn_orderCharts.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btn_orderCharts.Location = new System.Drawing.Point(362, 4);
+            this.btn_orderCharts.Location = new System.Drawing.Point(406, 4);
             this.btn_orderCharts.Name = "btn_orderCharts";
             this.btn_orderCharts.Size = new System.Drawing.Size(90, 23);
             this.btn_orderCharts.TabIndex = 17;
@@ -544,7 +557,7 @@ namespace MP3_Auto_Tagger_GUI
             // btn_refreshCharts
             // 
             this.btn_refreshCharts.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btn_refreshCharts.Location = new System.Drawing.Point(199, 4);
+            this.btn_refreshCharts.Location = new System.Drawing.Point(277, 4);
             this.btn_refreshCharts.Name = "btn_refreshCharts";
             this.btn_refreshCharts.Size = new System.Drawing.Size(90, 23);
             this.btn_refreshCharts.TabIndex = 16;
@@ -597,16 +610,47 @@ namespace MP3_Auto_Tagger_GUI
             this.lbl_chartProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lbl_chartProgress.UseCustomForeColor = true;
             // 
+            // _chartSongsPanel
+            // 
+            this._chartSongsPanel.AutoScroll = true;
+            this._chartSongsPanel.BackColor = System.Drawing.Color.White;
+            this._chartSongsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._chartSongsPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this._chartSongsPanel.Location = new System.Drawing.Point(0, 0);
+            this._chartSongsPanel.Name = "_chartSongsPanel";
+            this._chartSongsPanel.Size = new System.Drawing.Size(652, 394);
+            this._chartSongsPanel.TabIndex = 2;
+            this._chartSongsPanel.WrapContents = false;
+            this._chartSongsPanel.SizeChanged += new System.EventHandler(this.ariaFlow_SizeChanged);
+            this._chartSongsPanel.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.ariaFlow_ControlAdded);
+            this._chartSongsPanel.ControlRemoved += new System.Windows.Forms.ControlEventHandler(this.ariaFlow_ControlRemoved);
+            // 
             // TabPage5
             // 
             this.TabPage5.BackColor = System.Drawing.Color.Transparent;
-            this.TabPage5.Controls.Add(this.logInput);
-            this.TabPage5.Controls.Add(this.logBox);
+            this.TabPage5.Controls.Add(this.tableLayoutPanel2);
             this.TabPage5.Location = new System.Drawing.Point(4, 22);
             this.TabPage5.Name = "TabPage5";
             this.TabPage5.Size = new System.Drawing.Size(652, 394);
             this.TabPage5.TabIndex = 4;
             this.TabPage5.Text = "Process Log";
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Controls.Add(this.logInput, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.logBox, 0, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(3);
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(652, 394);
+            this.tableLayoutPanel2.TabIndex = 3;
             // 
             // logInput
             // 
@@ -614,7 +658,7 @@ namespace MP3_Auto_Tagger_GUI
             // 
             // 
             this.logInput.CustomButton.Image = null;
-            this.logInput.CustomButton.Location = new System.Drawing.Point(630, 1);
+            this.logInput.CustomButton.Location = new System.Drawing.Point(618, 1);
             this.logInput.CustomButton.Name = "";
             this.logInput.CustomButton.Size = new System.Drawing.Size(21, 21);
             this.logInput.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
@@ -622,9 +666,9 @@ namespace MP3_Auto_Tagger_GUI
             this.logInput.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
             this.logInput.CustomButton.UseSelectable = true;
             this.logInput.CustomButton.Visible = false;
-            this.logInput.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.logInput.Dock = System.Windows.Forms.DockStyle.Top;
             this.logInput.Lines = new string[0];
-            this.logInput.Location = new System.Drawing.Point(0, 371);
+            this.logInput.Location = new System.Drawing.Point(6, 364);
             this.logInput.MaxLength = 32767;
             this.logInput.Name = "logInput";
             this.logInput.PasswordChar = '\0';
@@ -632,51 +676,27 @@ namespace MP3_Auto_Tagger_GUI
             this.logInput.SelectedText = "";
             this.logInput.SelectionLength = 0;
             this.logInput.SelectionStart = 0;
-            this.logInput.Size = new System.Drawing.Size(652, 23);
-            this.logInput.TabIndex = 1;
+            this.logInput.ShowClearButton = true;
+            this.logInput.Size = new System.Drawing.Size(640, 23);
+            this.logInput.TabIndex = 7;
             this.logInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.logInput.UseSelectable = true;
             this.logInput.WaterMark = "Console Input";
             this.logInput.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
             this.logInput.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
+            this.logInput.Click += new System.EventHandler(this.logInput_Click);
+            this.logInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.logInput_KeyDown);
             // 
             // logBox
             // 
-            this.logBox.BackColor = System.Drawing.Color.White;
+            this.logBox.BackColor = System.Drawing.SystemColors.Control;
             this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.logBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.logBox.Location = new System.Drawing.Point(0, 0);
+            this.logBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logBox.Location = new System.Drawing.Point(6, 6);
             this.logBox.Name = "logBox";
-            this.logBox.Size = new System.Drawing.Size(652, 372);
-            this.logBox.TabIndex = 2;
+            this.logBox.Size = new System.Drawing.Size(640, 352);
+            this.logBox.TabIndex = 5;
             this.logBox.Text = "";
-            // 
-            // TabPage2
-            // 
-            this.TabPage2.BackColor = System.Drawing.Color.Transparent;
-            this.TabPage2.Controls.Add(this.browserLayouts);
-            this.TabPage2.Location = new System.Drawing.Point(4, 22);
-            this.TabPage2.Name = "TabPage2";
-            this.TabPage2.Size = new System.Drawing.Size(652, 394);
-            this.TabPage2.TabIndex = 5;
-            this.TabPage2.Text = "Browser";
-            // 
-            // browserLayouts
-            // 
-            this.browserLayouts.Controls.Add(this.lyricsBrowser);
-            this.browserLayouts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.browserLayouts.Location = new System.Drawing.Point(0, 0);
-            this.browserLayouts.Name = "browserLayouts";
-            this.browserLayouts.Size = new System.Drawing.Size(652, 394);
-            this.browserLayouts.TabIndex = 3;
-            // 
-            // lyricsBrowser
-            // 
-            this.lyricsBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lyricsBrowser.Location = new System.Drawing.Point(3, 3);
-            this.lyricsBrowser.Size = new System.Drawing.Size(451, 0);
-            this.lyricsBrowser.TabIndex = 0;
-            this.lyricsBrowser.LoadingFrameComplete += new Awesomium.Core.FrameEventHandler(this.LyricsBrowsersLoadingFrameComplete);
             // 
             // TabPage6
             // 
@@ -695,14 +715,14 @@ namespace MP3_Auto_Tagger_GUI
             this.lyricsView.BackgroundColor = System.Drawing.Color.Black;
             this.lyricsView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lyricsView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Green;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Green;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.lyricsView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle13.BackColor = System.Drawing.Color.Green;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.Green;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.lyricsView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.lyricsView.ColumnHeadersHeight = 25;
             this.lyricsView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.lyricsView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -710,14 +730,14 @@ namespace MP3_Auto_Tagger_GUI
             this.clm_LyricStatus,
             this.clm_ShowLyrics,
             this.clm_LastMod});
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.lyricsView.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle15.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.lyricsView.DefaultCellStyle = dataGridViewCellStyle15;
             this.lyricsView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lyricsView.EnableHeadersVisualStyles = false;
             this.lyricsView.GridColor = System.Drawing.Color.Black;
@@ -730,21 +750,6 @@ namespace MP3_Auto_Tagger_GUI
             this.lyricsView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lyricsView_MouseClick);
             this.lyricsView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lyricsView_MouseDown);
             // 
-            // ariaFlow
-            // 
-            this.ariaFlow.AutoScroll = true;
-            this.ariaFlow.BackColor = System.Drawing.Color.White;
-            this.ariaFlow.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ariaFlow.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.ariaFlow.Location = new System.Drawing.Point(0, 0);
-            this.ariaFlow.Name = "ariaFlow";
-            this.ariaFlow.Size = new System.Drawing.Size(652, 394);
-            this.ariaFlow.TabIndex = 2;
-            this.ariaFlow.WrapContents = false;
-            this.ariaFlow.SizeChanged += new System.EventHandler(this.ariaFlow_SizeChanged);
-            this.ariaFlow.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.ariaFlow_ControlAdded);
-            this.ariaFlow.ControlRemoved += new System.Windows.Forms.ControlEventHandler(this.ariaFlow_ControlRemoved);
-            // 
             // Column1
             // 
             this.Column1.FillWeight = 155.362F;
@@ -755,8 +760,8 @@ namespace MP3_Auto_Tagger_GUI
             // 
             // clm_LyricStatus
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.clm_LyricStatus.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.clm_LyricStatus.DefaultCellStyle = dataGridViewCellStyle14;
             this.clm_LyricStatus.FillWeight = 20F;
             this.clm_LyricStatus.HeaderText = "Status";
             this.clm_LyricStatus.Name = "clm_LyricStatus";
@@ -778,12 +783,32 @@ namespace MP3_Auto_Tagger_GUI
             this.clm_LastMod.Name = "clm_LastMod";
             this.clm_LastMod.Width = 140;
             // 
+            // btn_chooseFolder
+            // 
+            this.btn_chooseFolder.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btn_chooseFolder.BackColor = System.Drawing.Color.Transparent;
+            this.btn_chooseFolder.Location = new System.Drawing.Point(529, 479);
+            this.btn_chooseFolder.Name = "btn_chooseFolder";
+            this.btn_chooseFolder.Size = new System.Drawing.Size(151, 22);
+            this.btn_chooseFolder.TabIndex = 2;
+            this.btn_chooseFolder.Text = "Choose Folder To Monitor";
+            this.btn_chooseFolder.UseSelectable = true;
+            this.btn_chooseFolder.Click += new System.EventHandler(this.btn_chooseFolder_Click);
+            // 
+            // lyricsBrowser
+            // 
+            this.lyricsBrowser.Location = new System.Drawing.Point(3, 3);
+            this.lyricsBrowser.Size = new System.Drawing.Size(646, 388);
+            this.lyricsBrowser.TabIndex = 0;
+            this.lyricsBrowser.LoadingFrameComplete += new Awesomium.Core.FrameEventHandler(this.LyricsBrowsersLoadingFrameComplete);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(700, 500);
+            this.Controls.Add(this.btn_chooseFolder);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.lblMonitoringDirectory);
             this.Controls.Add(this.label1);
@@ -823,8 +848,7 @@ namespace MP3_Auto_Tagger_GUI
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.TabPage5.ResumeLayout(false);
-            this.TabPage2.ResumeLayout(false);
-            this.browserLayouts.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.TabPage6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lyricsView)).EndInit();
             this.ResumeLayout(false);
@@ -860,20 +884,14 @@ namespace MP3_Auto_Tagger_GUI
         private Panel pnl_chartControls;
         private TableLayoutPanel tableLayoutPanel1;
         private Label lbl_chartCount;
-        private MetroFramework.Controls.MetroCheckBox chk_hideCheckedCharts;
         private Button btn_orderCharts;
         private Button btn_refreshCharts;
         private Panel pnl_searchingCharts;
         private Panel panel1;
         private PictureBox pictureBox4;
         private MetroFramework.Controls.MetroLabel lbl_chartProgress;
-        private BetterFlowLayout ariaFlow;
+        private FlowLayoutPanel _chartSongsPanel;
         private TabPage TabPage5;
-        private MetroFramework.Controls.MetroTextBox logInput;
-        private RichTextBox logBox;
-        private TabPage TabPage2;
-        private FlowLayoutPanel browserLayouts;
-        private Awesomium.Windows.Forms.WebControl lyricsBrowser;
         private TabPage TabPage6;
         private DataGridView lyricsView;
         private Panel pnl_EmptyCharts;
@@ -885,6 +903,13 @@ namespace MP3_Auto_Tagger_GUI
         private DataGridViewTextBoxColumn clm_LyricStatus;
         private DataGridViewTextBoxColumn clm_ShowLyrics;
         private DataGridViewTextBoxColumn clm_LastMod;
+        private TableLayoutPanel tableLayoutPanel2;
+        private MetroFramework.Controls.MetroTextBox logInput;
+        private RichTextBox logBox;
+        private Button btn_orderBySeen;
+        private MetroFramework.Controls.MetroCheckBox chk_hideCheckedCharts;
+        private Awesomium.Windows.Forms.WebControl lyricsBrowser;
+        private MetroFramework.Controls.MetroButton btn_chooseFolder;
     }
 }
 

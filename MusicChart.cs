@@ -10,37 +10,37 @@ namespace MP3_Auto_Tagger_GUI
     {
         public class DistanceCheck
         {
-            int maxDistance;
-            string s1;
+            int _maxDistance;
+            string _s1;
 
             public DistanceCheck(string s1, int percCorrect)
             {
-                this.maxDistance = s1.Length - (int)(s1.Length * percCorrect / 100);
-                this.s1 = s1.ToLower();
+                this._maxDistance = s1.Length - (int)(s1.Length * percCorrect / 100);
+                this._s1 = s1.ToLower();
             }
 
             public bool Check(string s2)
             {
                 s2 = s2.ToLower();
 
-                int nDiagonal = s1.Length - System.Math.Min(s1.Length, s2.Length);
-                int mDiagonal = s2.Length - System.Math.Min(s1.Length, s2.Length);
+                int nDiagonal = _s1.Length - System.Math.Min(_s1.Length, s2.Length);
+                int mDiagonal = s2.Length - System.Math.Min(_s1.Length, s2.Length);
 
-                if (s1.Length == 0) return s2.Length <= maxDistance;
-                if (s2.Length == 0) return s1.Length <= maxDistance;
+                if (_s1.Length == 0) return s2.Length <= _maxDistance;
+                if (s2.Length == 0) return _s1.Length <= _maxDistance;
 
-                int[,] matrix = new int[s1.Length + 1, s2.Length + 1];
+                int[,] matrix = new int[_s1.Length + 1, s2.Length + 1];
 
-                for (int i = 0; i <= s1.Length; matrix[i, 0] = i++) ;
+                for (int i = 0; i <= _s1.Length; matrix[i, 0] = i++) ;
                 for (int j = 0; j <= s2.Length; matrix[0, j] = j++) ;
 
                 int cost;
 
-                for (int i = 1; i <= s1.Length; i++)
+                for (int i = 1; i <= _s1.Length; i++)
                 {
                     for (int j = 1; j <= s2.Length; j++)
                     {
-                        if (s2.Substring(j - 1, 1) == s1.Substring(i - 1, 1))
+                        if (s2.Substring(j - 1, 1) == _s1.Substring(i - 1, 1))
                         {
                             cost = 0;
                         }
@@ -56,7 +56,7 @@ namespace MP3_Auto_Tagger_GUI
 
                     if (i >= nDiagonal)
                     {
-                        if (matrix[nDiagonal, mDiagonal] > maxDistance)
+                        if (matrix[nDiagonal, mDiagonal] > _maxDistance)
                         {
                             return false;
                         }
@@ -76,14 +76,19 @@ namespace MP3_Auto_Tagger_GUI
                 return System.Math.Min(n1, System.Math.Min(n2, n3));
             }
         }
-        public MusicChart(string Artist, string Title, Image img, bool IsChecked)
+
+
+        public DateTime LastSeen { get; set; }
+        public MusicChart(string artist, string title, Image img, bool isChecked, DateTime lastSeen)
         {
             InitializeComponent();
-            lbl_Artist.Text = Artist;
-            lbl_Title.Text = Title;
-            Checked = IsChecked;
-            btn_ClearSong.Visible = !IsChecked;
+            lbl_Artist.Text = artist;
+            lbl_Title.Text = title;
+            Checked = isChecked;
+            btn_ClearSong.Visible = !isChecked;
             image.Image = img;
+            LastSeen = lastSeen;
+            label1.Text = (DateTime.Now - lastSeen).Days.ToString();
         }
 
         public Image SongImage
@@ -98,15 +103,15 @@ namespace MP3_Auto_Tagger_GUI
 
         public bool ChartHasSimilar(string comparisonStr)
         {
-            string s = new TrontorMP3File(lbl_Artist.Text + " - " + lbl_Title.Text).MetaFixFilename(false).Trim();
+            string s = new TrontorMp3File(lbl_Artist.Text + " - " + lbl_Title.Text).MetaFixFilename(false).Trim();
             var splitParts = s.Split('-'); 
-            var Percentage = 0;
-            Percentage = splitParts.Length > 2
+            var percentage = 0;
+            percentage = splitParts.Length > 2
                 ? Math.Max(new SimilarityCheck(comparisonStr, splitParts[1]).Percentage(),
                     new SimilarityCheck(comparisonStr, splitParts[2]).Percentage())
                 : new SimilarityCheck(comparisonStr, splitParts[1]).Percentage();
 
-            return Percentage > 70;
+            return percentage > 70;
         }
 
         private void btn_LoadVideo_Click(object sender, EventArgs e)
@@ -114,32 +119,43 @@ namespace MP3_Auto_Tagger_GUI
             Process.Start(
                 $"https://www.youtube.com/results?search_query=" + lbl_Artist.Text + "+-+" + lbl_Title.Text);
         }
+
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+
+
+        }
+
+        private void btn_ClearSong_Click(object sender, EventArgs e)
+        {
+
+        }
     }
     public class SimilarityCheck
     {
-        int maxDistance;
-        string s1;
-        string s2;
-        bool _SplitHeifenAndReturnLargest = false;
-        public SimilarityCheck(string s1, string s2, bool SplitF2andReturnLargest = false)
+        int _maxDistance;
+        string _s1;
+        string _s2;
+        bool _splitHeifenAndReturnLargest = false;
+        public SimilarityCheck(string s1, string s2, bool splitF2AndReturnLargest = false)
         {
-            this.s1 = s1.ToLower().Trim();
-            this.s2 = s2.ToLower().Trim();
-            _SplitHeifenAndReturnLargest = SplitF2andReturnLargest;
+            this._s1 = s1.ToLower().Trim();
+            this._s2 = s2.ToLower().Trim();
+            _splitHeifenAndReturnLargest = splitF2AndReturnLargest;
         }
 
         public int Percentage()
         {
-            var splitParts = s2.Split('-');
-            var Percentage = 0;
+            var splitParts = _s2.Split('-');
+            var percentage = 0;
             if (splitParts.Length > 2)
             {
-                s2 = splitParts[1];
-                if (CalculatePercentage() > Percentage)
-                    Percentage = CalculatePercentage();
-                s2 = splitParts[2];
-                if (CalculatePercentage() > Percentage)
-                    Percentage = CalculatePercentage();
+                _s2 = splitParts[1];
+                if (CalculatePercentage() > percentage)
+                    percentage = CalculatePercentage();
+                _s2 = splitParts[2];
+                if (CalculatePercentage() > percentage)
+                    percentage = CalculatePercentage();
             }
             else if (splitParts.Length == 1)
             {
@@ -147,19 +163,19 @@ namespace MP3_Auto_Tagger_GUI
             }
             else
             {
-                s2 = splitParts[1];
-                if (CalculatePercentage() > Percentage)
-                    Percentage = CalculatePercentage();
+                _s2 = splitParts[1];
+                if (CalculatePercentage() > percentage)
+                    percentage = CalculatePercentage();
             }
-            return Percentage; 
+            return percentage; 
         }
 
         public int CalculatePercentage()
         {
-            if ((s1.Length > 5 && s1.Contains(s2)) || (s2.Length > 5 && s2.Contains(s1)))
+            if ((_s1.Length > 5 && _s1.Contains(_s2)) || (_s2.Length > 5 && _s2.Contains(_s1)))
                 return 100;
-            int n = s1.Length;
-            int m = s2.Length;
+            int n = _s1.Length;
+            int m = _s2.Length;
             int[,] d = new int[n + 1, m + 1];
 
             // Step 1
@@ -189,7 +205,7 @@ namespace MP3_Auto_Tagger_GUI
                 for (int j = 1; j <= m; j++)
                 {
                     // Step 5
-                    int cost = (s2[j - 1] == s1[i - 1]) ? 0 : 1;
+                    int cost = (_s2[j - 1] == _s1[i - 1]) ? 0 : 1;
 
                     // Step 6
                     d[i, j] = Math.Min(
@@ -198,7 +214,7 @@ namespace MP3_Auto_Tagger_GUI
                 }
             }
             // Step 7
-            int bigger = Math.Max(s1.Length, s2.Length);
+            int bigger = Math.Max(_s1.Length, _s2.Length);
             double pct = ((double)(bigger - d[n, m]) / bigger) * 100;
             //  Debug.WriteLine(s1 + " " + s2 + (int) pct);
             return (int)pct;

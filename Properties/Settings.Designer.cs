@@ -46,5 +46,17 @@ namespace MP3_Auto_Tagger_GUI.Properties {
                 this["LastLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string folder {
+            get {
+                return ((string)(this["folder"]));
+            }
+            set {
+                this["folder"] = value;
+            }
+        }
     }
 }

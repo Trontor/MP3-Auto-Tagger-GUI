@@ -118,16 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="btn_Reorder.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
-        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJ
-        TUUH4AMECBY1Vmp86QAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAACeSURBVDhP
-        7YyxDYNAEASRA0cU5oiMgJcLIfwSIHAzRJaogQjcAB04Ov9aLH9v7guwRDDB3e5OISJZ+lfTAisj5pP0
-        i3sCKyPmk5yCvxN48Rc/1VcdWgJ00OWtys0tlN/dfK/iLxUgQwdd/nbBY6rLEI5aogVx7EZ0udsF4FeC
-        MciNQSIAWhJYN8wxSA6iJLJhjsHhQb6S2Q0gNxaR4gMAGdE/qbntAAAAAABJRU5ErkJggg==
-</value>
-  </data>
   <data name="btn_LoadVideo.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
@@ -140,6 +130,16 @@
         YNbd0CXBo8PWhBJvwqKLQkddAZhxF/4jK4jx4GLbEHsTvkqFB1YBvM5wXsbzvdD7AjGeuQDjgwgOd2iX
         0PrZ6V7ccgGHYjAwMJH9dv+MtvgNJKQiQBJtu5Bg9sUcRfqtz4mvZBj0cx60ShkFzFvJbcFgDKSAvJRW
         gVsQE6oqBsfKoE2DFCYcVWnNpEDDvbxU8vqtg23ZR7mHEoqHEP0AC1QRfOd3v/cAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="btn_Reorder.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
+        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJ
+        TUUH4AMECBY1Vmp86QAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAACeSURBVDhP
+        7YyxDYNAEASRA0cU5oiMgJcLIfwSIHAzRJaogQjcAB04Ov9aLH9v7guwRDDB3e5OISJZ+lfTAisj5pP0
+        i3sCKyPmk5yCvxN48Rc/1VcdWgJ00OWtys0tlN/dfK/iLxUgQwdd/nbBY6rLEI5aogVx7EZ0udsF4FeC
+        MciNQSIAWhJYN8wxSA6iJLJhjsHhQb6S2Q0gNxaR4gMAGdE/qbntAAAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="btn_ClearSong.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
