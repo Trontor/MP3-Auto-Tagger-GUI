@@ -312,12 +312,9 @@ namespace MP3_Auto_Tagger_GUI
                     string inrHTml = client.DownloadString(landingPg);
                     innerDoc.LoadHtml(inrHTml);
 
-                    foreach (
-                        HtmlNode element in
-                            innerDoc.DocumentNode.Descendants()
-                                .Where(
-                                    element =>
-                                        element.InnerText.Contains("full size") && element.Attributes.Contains("href")))
+                    var ele_Img =
+                        innerDoc.DocumentNode.Descendants().Where(element => element.Attributes.Contains("id") && element.Attributes["id"].Value== "thumbnail" && element.Attributes.Contains("href"));
+                    foreach (HtmlNode element in ele_Img)
                     {
                         using (WebClient imgClient = new WebClient()) // WebClient class inherits IDisposable
                         {
@@ -325,10 +322,13 @@ namespace MP3_Auto_Tagger_GUI
                             try
                             {
                                 Do(() => imgClient.DownloadFile(element.Attributes["href"].Value, tempPath),
-                                    TimeSpan.FromSeconds(1));
+                                    TimeSpan.FromSeconds(5));
                             }
-                            catch (AggregateException)
+                            catch (AggregateException ex)
                             {
+                                Debug.WriteLine(ex.ToString());
+                                Debug.WriteLine(tempPath);
+                                Debug.WriteLine((element.Attributes["href"].Value));
                                 return false;
                             }
                         }
@@ -1621,6 +1621,7 @@ namespace MP3_Auto_Tagger_GUI
                 PromptMonitorSelection();
             return Properties.Settings.Default.folder;
         }
+
         private bool ProcessArtwork(string filename, bool showdiag = true, bool bypassExistingCheck = false)
         {
             return filename.Contains("-") && GoogleImageSearch(Path.GetFileNameWithoutExtension(filename), showdiag, bypassExistingCheck);
@@ -1851,6 +1852,7 @@ namespace MP3_Auto_Tagger_GUI
                         Invoke(new Action(() => Console(monitorTxt, clr)));
                         _fileChangedExceptions.Add(fixedFileName);
                     }
+                    else return;
 
                     if (baseFileName != fixedFileName)
                     {
@@ -1862,7 +1864,7 @@ namespace MP3_Auto_Tagger_GUI
                     }
                     string path_fixedFile = Path.Combine(Path.GetDirectoryName(e.FullPath), fixedFileName + ".mp3");
                     ProcessArtwork(path_fixedFile);
-                    FindSongLyrics(path_fixedFile);
+                    Invoke(new Action(() => FindSongLyrics(path_fixedFile)));
                     ScanLocalLyrics();
                     new Thread(() =>
                     {
@@ -1872,8 +1874,9 @@ namespace MP3_Auto_Tagger_GUI
                     { IsBackground = true }.Start();
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.ToString());
                 ScanLocalLyrics();
                 // ignored
             }
@@ -2190,16 +2193,6 @@ namespace MP3_Auto_Tagger_GUI
             _chartSongsPanel.ResumeLayout();
         }
 
-        private void ariaFlow_ControlAdded(object sender, ControlEventArgs e)
-        {
-            lbl_chartCount.Text = string.Format("{0} songs listed.", _chartSongsPanel.Controls.Count);
-            if (_chartSongsPanel.Controls.Count > 0)
-            {
-                pnl_EmptyCharts.Visible = false;
-                pnl_searchingCharts.Visible = false;
-            }
-        }
-
         private void ariaFlow_ControlRemoved(object sender, ControlEventArgs e)
         {
             lbl_chartCount.Text = string.Format("{0} songs listed.", _chartSongsPanel.Controls.Count);
@@ -2276,6 +2269,11 @@ namespace MP3_Auto_Tagger_GUI
                     Environment.Exit(0);
                 }
             }
+        }
+
+        private void ariaFlow_ControlAdded(object sender, ControlEventArgs e)
+        {
+            pnl_EmptyCharts.Visible = false;
         }
 
         private enum LyricSite
