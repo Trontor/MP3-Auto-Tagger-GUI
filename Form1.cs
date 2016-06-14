@@ -18,7 +18,6 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Awesomium.Core;
 using HtmlAgilityPack;
-using MetroFramework.Forms;
 using MP3_Auto_Tagger_GUI.Properties;
 using TagLib;
 using File = TagLib.File;
@@ -27,7 +26,7 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace MP3_Auto_Tagger_GUI
 {
-    public partial class Form1 : MetroForm
+    public partial class Form1 : Form
     {
         public static string PathProgramData =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -48,17 +47,67 @@ namespace MP3_Auto_Tagger_GUI
         public NotifyIcon NotificationIcon;
 
         public List<WebView> browserTabs = new List<WebView>();
+
         public Form1()
         {
             InitializeComponent();
-            BackColor = Color.Lime;
-            TransparencyKey = Color.Lime;
-            SetStyle(ControlStyles.ResizeRedraw, true);
+
+            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.SupportsTransparentBackColor, true);
             StartPosition = FormStartPosition.Manual;
             Top = (Screen.PrimaryScreen.Bounds.Height - Height) / 2;
             Left = (Screen.PrimaryScreen.Bounds.Width - Width) / 2;
             ChangeMonitorPath(GetMusicPath());
             _songsWithoutLyrics = new List<string>();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Environment.SetEnvironmentVariable("TEMP", "mp3tagger");
+            WindowState = FormWindowState.Minimized;
+
+            //Create Program Data Directory
+            if (!Directory.Exists(PathProgramData))
+                Directory.CreateDirectory(PathProgramData);
+
+
+            SetStatus("Initialising Application", Status.Normal, false);
+
+            //Check if Filter
+            if (_filter)
+                ChangeMonitorPath(@"D:\Music - Copy");
+
+            Thread notifyThread = new Thread(delegate ()
+            {
+                Menu = new ContextMenu();
+
+                Menu.MenuItems.Add(0, new MenuItem("List Artists", mnuArtists_Click));
+                Menu.MenuItems.Add(1, new MenuItem("Open Folder", (o, d) => { Process.Start(PathProgramData); }));
+                Menu.MenuItems.Add(2, new MenuItem("Exit", mnuExit_Click));
+
+                NotificationIcon = new NotifyIcon
+                {
+                    Icon = Resources.mp3,
+                    ContextMenu = Menu,
+                    Text = "MP3 File Monitor -- Made for Rohyl, by Rohyl"
+                };
+                NotificationIcon.DoubleClick += NotificationIcon_Click;
+
+                NotificationIcon.Visible = true;
+                Application.Run();
+            });
+            _files = Directory.GetFiles(GetMusicPath(), "*.mp3", SearchOption.TopDirectoryOnly);
+            notifyThread.Start();
+
+            SetStatus("Starting monitor component...");
+            FileSystemWatcher monitor = new FileSystemWatcher(GetMusicPath(), "*.mp3") { EnableRaisingEvents = true };
+            monitor.Created += monitor_CreatedOrChanged;
+            monitor.Deleted += monitor_CreatedOrChanged;
+            monitor.Changed += monitor_CreatedOrChanged;
+
+            SetStatus("Preparing music file analysis");
+            AnalyseAllFiles();
+            SetStatus("Type help for console commands.", Status.Good);
+            ScanLocalLyrics();
         }
 
         public sealed override Color BackColor
@@ -313,7 +362,7 @@ namespace MP3_Auto_Tagger_GUI
                     innerDoc.LoadHtml(inrHTml);
 
                     var ele_Img =
-                        innerDoc.DocumentNode.Descendants().Where(element => element.Attributes.Contains("id") && element.Attributes["id"].Value== "thumbnail" && element.Attributes.Contains("href"));
+                        innerDoc.DocumentNode.Descendants().Where(element => element.Attributes.Contains("id") && element.Attributes["id"].Value == "thumbnail" && element.Attributes.Contains("href"));
                     foreach (HtmlNode element in ele_Img)
                     {
                         using (WebClient imgClient = new WebClient()) // WebClient class inherits IDisposable
@@ -1940,56 +1989,12 @@ namespace MP3_Auto_Tagger_GUI
             }
             commandList = null;
             _getInput = true;
-            logInput.WaterMarkColor = Color.Black;
             logInput.Text = "";
         }
 
         public string GetFixedFileName(string name)
         {
             return new TrontorMp3File(name).MetaFixFilename(false).Trim();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            Environment.SetEnvironmentVariable("TEMP", "mp3tagger");
-            if (!Directory.Exists(PathProgramData))
-                Directory.CreateDirectory(PathProgramData);
-            WindowState = FormWindowState.Minimized;
-            SetStatus("Initialising Application", Status.Normal, false);
-            if (_filter)
-                ChangeMonitorPath(@"D:\Music - Copy");
-            Thread notifyThread = new Thread(delegate ()
-            {
-                Menu = new ContextMenu();
-
-                Menu.MenuItems.Add(0, new MenuItem("List Artists", mnuArtists_Click));
-                Menu.MenuItems.Add(1, new MenuItem("Open Folder", (o, d) => { Process.Start(PathProgramData); }));
-                Menu.MenuItems.Add(2, new MenuItem("Exit", mnuExit_Click));
-
-                NotificationIcon = new NotifyIcon
-                {
-                    Icon = Resources.mp3,
-                    ContextMenu = Menu,
-                    Text = "MP3 File Monitor -- Made for Rohyl, by Rohyl"
-                };
-                NotificationIcon.DoubleClick += NotificationIcon_Click;
-
-                NotificationIcon.Visible = true;
-                Application.Run();
-            });
-            _files = Directory.GetFiles(GetMusicPath(), "*.mp3", SearchOption.TopDirectoryOnly);
-            notifyThread.Start();
-
-            SetStatus("Starting monitor component...");
-            FileSystemWatcher monitor = new FileSystemWatcher(GetMusicPath(), "*.mp3") { EnableRaisingEvents = true };
-            monitor.Created += monitor_CreatedOrChanged;
-            monitor.Deleted += monitor_CreatedOrChanged;
-            monitor.Changed += monitor_CreatedOrChanged;
-            SetStatus("Preparing music file analysis");
-            AnalyseAllFiles();
-            //FindSongLyrics();
-            SetStatus("Type help for console commands.", Status.Good);
-            ScanLocalLyrics();
         }
 
         private void btn_RescanAll_Click(object sender, EventArgs e)

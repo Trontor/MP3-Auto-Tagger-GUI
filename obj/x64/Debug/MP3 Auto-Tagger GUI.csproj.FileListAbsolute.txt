@@ -1,0 +1,33 @@
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\MP3 Auto-Tagger GUI.exe.config
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\MP3 Auto-Tagger GUI.exe
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\MP3 Auto-Tagger GUI.pdb
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\Awesomium.Core.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\Awesomium.Windows.Forms.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\HtmlAgilityPack.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\MetroFramework.Design.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\MetroFramework.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\MetroFramework.Fonts.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\policy.2.0.taglib-sharp.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\taglib-sharp.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\Awesomium.Core.xml
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\Awesomium.Windows.Forms.xml
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\awesomium.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\icudt.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\avcodec-53.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\avformat-53.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\avutil-51.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\libEGL.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\libGLESv2.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\awesomium_process
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\inspector.pak
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\xinput9_1_0.dll
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\pdf_js.pak
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\x64\Debug\policy.2.0.taglib-sharp.config
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\x64\Debug\MP3 Auto-Tagger GUI.csprojResolveAssemblyReference.cache
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\x64\Debug\MP3_Auto_Tagger_GUI.LyricsDisplay.resources
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\x64\Debug\MP3_Auto_Tagger_GUI.MusicChart.resources
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\x64\Debug\MP3_Auto_Tagger_GUI.Form1.resources
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\x64\Debug\MP3_Auto_Tagger_GUI.Properties.Resources.resources
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\x64\Debug\MP3 Auto-Tagger GUI.csproj.GenerateResource.Cache
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\x64\Debug\MP3 Auto-Tagger GUI.exe
+C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\obj\x64\Debug\MP3 Auto-Tagger GUI.pdb

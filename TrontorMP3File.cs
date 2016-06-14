@@ -4,8 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using MetroFramework.Controls;
+using System.Xml.Linq;  
 using File = System.IO.File;
 
 namespace MP3_Auto_Tagger_GUI
@@ -36,7 +35,7 @@ namespace MP3_Auto_Tagger_GUI
 
         private static RichTextBox _mainLogBox = null;
 
-        private static MetroTextBox _mainInputBox = null;
+        private static TextBox _mainInputBox = null;
 
         public TrontorMp3File(string filePath)
         {

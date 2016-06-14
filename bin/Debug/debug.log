@@ -162,3 +162,63 @@
 [0602/072147:INFO:(0)] Running Awesomium 1.7.5.1
 [0602/220111:INFO:(0)] WebCore is now online.
 [0602/220111:INFO:(0)] Running Awesomium 1.7.5.1
+[0603/003412:INFO:(0)] WebCore is now online.
+[0603/003412:INFO:(0)] Running Awesomium 1.7.5.1
+[0603/074623:INFO:(0)] WebCore is now online.
+[0603/074623:INFO:(0)] Running Awesomium 1.7.5.1
+[0603/114612:ERROR:ssl_client_socket_nss.cc(1529)] handshake with server www.runescape.com:443 failed; NSS error code -5938, net_error -107
+[0603/114612:ERROR:ssl_client_socket_nss.cc(1529)] handshake with server www.runescape.com:443 failed; NSS error code -5938, net_error -107
+[0604/224612:ERROR:ipc_channel_win.cc(261)] pipe error: 109
+[0605/195204:INFO:(0)] WebCore is now online.
+[0605/195204:INFO:(0)] Running Awesomium 1.7.5.1
+[0606/045152:ERROR:ipc_channel_win.cc(261)] pipe error: 109
+[0606/214113:INFO:(0)] WebCore is now online.
+[0606/214113:INFO:(0)] Running Awesomium 1.7.5.1
+[0607/073233:INFO:(0)] WebCore is now online.
+[0607/073233:INFO:(0)] Running Awesomium 1.7.5.1
+[0607/183223:ERROR:ssl_client_socket_nss.cc(1529)] handshake with server www.runescape.com:443 failed; NSS error code -5938, net_error -107
+[0607/183224:ERROR:ssl_client_socket_nss.cc(1529)] handshake with server www.runescape.com:443 failed; NSS error code -5938, net_error -107
+[0610/074044:INFO:(0)] WebCore is now online.
+[0610/074044:INFO:(0)] Running Awesomium 1.7.5.1
+[0610/172348:INFO:(0)] WebCore is now online.
+[0610/172348:INFO:(0)] Running Awesomium 1.7.5.1
+[0610/172458:INFO:(0)] WebCore is now online.
+[0610/172458:INFO:(0)] Running Awesomium 1.7.5.1
+[0610/194850:INFO:(0)] WebCore is now online.
+[0610/194850:INFO:(0)] Running Awesomium 1.7.5.1
+[0610/194957:INFO:(0)] WebCore is now online.
+[0610/194957:INFO:(0)] Running Awesomium 1.7.5.1
+[0610/195226:INFO:(0)] WebCore is now online.
+[0610/195226:INFO:(0)] Running Awesomium 1.7.5.1
+[0610/200150:INFO:(0)] WebCore is now online.
+[0610/200150:INFO:(0)] Running Awesomium 1.7.5.1
+[0610/201627:INFO:(0)] WebCore is now online.
+[0610/201627:INFO:(0)] Running Awesomium 1.7.5.1
+[0610/201709:INFO:(0)] WebCore is now online.
+[0610/201709:INFO:(0)] Running Awesomium 1.7.5.1
+[0610/201756:INFO:(0)] WebCore is now online.
+[0610/201756:INFO:(0)] Running Awesomium 1.7.5.1
+[0610/201822:INFO:(0)] WebCore is now online.
+[0610/201822:INFO:(0)] Running Awesomium 1.7.5.1
+[0610/201927:INFO:(0)] WebCore is now online.
+[0610/201927:INFO:(0)] Running Awesomium 1.7.5.1
+[0611/000100:INFO:(0)] WebCore is now online.
+[0611/000100:INFO:(0)] Running Awesomium 1.7.5.1
+[0611/095831:INFO:(0)] WebCore is now online.
+[0611/095831:INFO:(0)] Running Awesomium 1.7.5.1
+[0612/002948:INFO:(0)] WebCore is now online.
+[0612/002948:INFO:(0)] Running Awesomium 1.7.5.1
+[0612/152940:ERROR:ipc_channel_win.cc(360)] pipe error: 232
+[0612/214933:INFO:(0)] WebCore is now online.
+[0612/214933:INFO:(0)] Running Awesomium 1.7.5.1
+[0612/234930:ERROR:ipc_channel_win.cc(261)] pipe error: 109
+[0613/135423:INFO:(0)] WebCore is now online.
+[0613/135423:INFO:(0)] Running Awesomium 1.7.5.1
+[0613/174126:INFO:(0)] WebCore is now online.
+[0613/174126:INFO:(0)] Running Awesomium 1.7.5.1
+[0614/130930:INFO:(0)] WebCore is now online.
+[0614/130930:INFO:(0)] Running Awesomium 1.7.5.1
+[0614/154741:INFO:(0)] WebCore is now online.
+[0614/154741:INFO:(0)] Running Awesomium 1.7.5.1
+[0614/155344:INFO:(0)] WebCore is now online.
+[0614/155344:INFO:(0)] Running Awesomium 1.7.5.1

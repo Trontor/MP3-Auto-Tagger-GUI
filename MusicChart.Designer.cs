@@ -1,4 +1,6 @@
-﻿namespace MP3_Auto_Tagger_GUI
+﻿using System.Windows.Forms;
+
+namespace MP3_Auto_Tagger_GUI
 {
     partial class MusicChart
     {
@@ -31,7 +33,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MusicChart));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btn_LoadVideo = new System.Windows.Forms.Button();
-            this.btn_Reorder = new MetroFramework.Controls.MetroButton();
+            this.btn_Reorder = new Button ();
             this.image = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbl_Artist = new System.Windows.Forms.Label();
@@ -97,8 +99,7 @@
             this.btn_Reorder.Location = new System.Drawing.Point(411, 5);
             this.btn_Reorder.Name = "btn_Reorder";
             this.btn_Reorder.Size = new System.Drawing.Size(16, 38);
-            this.btn_Reorder.TabIndex = 12;
-            this.btn_Reorder.UseSelectable = true;
+            this.btn_Reorder.TabIndex = 12; 
             this.btn_Reorder.Click += new System.EventHandler(this.metroButton1_Click);
             // 
             // image
@@ -229,7 +230,7 @@
         public System.Windows.Forms.Label lbl_Title;
         public System.Windows.Forms.Label lbl_Artist;
         public System.Windows.Forms.Button btn_ClearSong;
-        public MetroFramework.Controls.MetroButton btn_Reorder;
+        public Button  btn_Reorder;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;

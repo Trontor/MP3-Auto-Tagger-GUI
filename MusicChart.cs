@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.Diagnostics;
-using System.Windows.Forms;
-using MetroFramework.Controls;
+using System.Windows.Forms; 
 
 namespace MP3_Auto_Tagger_GUI
 {
-    public partial class MusicChart : MetroUserControl
+    public partial class MusicChart : UserControl
     {
         public class DistanceCheck
         {
