@@ -222,3 +222,40 @@
 [0614/154741:INFO:(0)] Running Awesomium 1.7.5.1
 [0614/155344:INFO:(0)] WebCore is now online.
 [0614/155344:INFO:(0)] Running Awesomium 1.7.5.1
+[0615/110028:INFO:(0)] WebCore is now online.
+[0615/110028:INFO:(0)] Running Awesomium 1.7.5.1
+[0615/115353:INFO:(0)] WebCore is now online.
+[0615/115353:INFO:(0)] Running Awesomium 1.7.5.1
+[0615/115636:INFO:(0)] WebCore is now online.
+[0615/115636:INFO:(0)] Running Awesomium 1.7.5.1
+[0615/115742:INFO:(0)] WebCore is now online.
+[0615/115742:INFO:(0)] Running Awesomium 1.7.5.1
+[0615/120018:WARNING:Awesomium.NET(0)] System.NullReferenceException: Object reference not set to an instance of an object.
+   at MP3_Auto_Tagger_GUI.Form1.<>c__DisplayClass57_1.<FindSongLyrics>b__1(Object pol, FrameEventArgs kol) in C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\Form1.cs:line 772
+   at Awesomium.Core.WebView.OJeCThqUOrqCqffDHoI(Object , Object , Object )
+   at Awesomium.Core.WebView.OnLoadingFrameComplete(FrameEventArgs e)
+   at Awesomium.Core.WebView.Awesomium.Core.IWebViewListener.OnLoadingFrameComplete(FrameEventArgs e)
+   at Awesomium.Core.WebViewListener.FireEvent(IWebViewListener view, IWebViewEventArgs e)
+   at Awesomium.Core.WebViewListener.TJmZwameepITyxprP0P(Object , Object )
+   at Awesomium.Core.WebViewListener.ArActQZexT(IntPtr  , Int64  , Boolean  , Uri  )
+   at Awesomium.Core.NativeMethods.WebCore_Update(HandleRef jarg1)
+   at Awesomium.Core.WebCore.UpdateThunk()
+[0615/120018:ERROR:ipc_channel_win.cc(326)] pipe error: 109
+[0615/120038:INFO:(0)] WebCore is now online.
+[0615/120038:INFO:(0)] Running Awesomium 1.7.5.1
+[0616/090042:INFO:(0)] WebCore is now online.
+[0616/090042:INFO:(0)] Running Awesomium 1.7.5.1
+[0616/161858:INFO:(0)] WebCore is now online.
+[0616/161858:INFO:(0)] Running Awesomium 1.7.5.1
+[0616/181903:ERROR:ipc_channel_win.cc(261)] pipe error: 109
+[0617/130805:INFO:(0)] WebCore is now online.
+[0617/130805:INFO:(0)] Running Awesomium 1.7.5.1
+[0618/161624:INFO:(0)] WebCore is now online.
+[0618/161624:INFO:(0)] Running Awesomium 1.7.5.1
+[0619/145423:INFO:(0)] WebCore is now online.
+[0619/145423:INFO:(0)] Running Awesomium 1.7.5.1
+[0619/205423:ERROR:ssl_client_socket_nss.cc(1529)] handshake with server www.runescape.com:443 failed; NSS error code -5938, net_error -107
+[0619/205426:ERROR:ssl_client_socket_nss.cc(1529)] handshake with server www.runescape.com:443 failed; NSS error code -5938, net_error -107
+[0619/215420:ERROR:ssl_client_socket_nss.cc(1529)] handshake with server www.runescape.com:443 failed; NSS error code -5938, net_error -107
+[0621/001911:INFO:(0)] WebCore is now online.
+[0621/001911:INFO:(0)] Running Awesomium 1.7.5.1

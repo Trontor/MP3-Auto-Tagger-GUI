@@ -3,7 +3,6 @@ C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\MP3 Auto-Tag
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\MP3 Auto-Tagger GUI.pdb
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\Awesomium.Core.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\Awesomium.Windows.Forms.dll
-C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\MetroFramework.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\policy.2.0.taglib-sharp.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\taglib-sharp.dll
 C:\Users\Rohyl Joshi\Documents\GitHub\MP3-Auto-Tagger-GUI\bin\Debug\Awesomium.Core.xml

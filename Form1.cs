@@ -2073,14 +2073,18 @@ namespace MP3_Auto_Tagger_GUI
                 }));
                 m.MenuItems.Add(new MenuItem("Scan Lyrics on MusixMatch (Reccommended)", (o, h) =>
                 {
-                    string filePath =
-                        (string)
-                            lyricsView.Rows[lyricsView.Rows.GetFirstRow(DataGridViewElementStates.Selected)].Cells[0]
-                                .Value;
-                    string path = Path.Combine(@"D:\Music", filePath + ".mp3");
-                    if (System.IO.File.Exists(path))
+                    if (lyricsView.Rows[lyricsView.Rows.GetFirstRow(DataGridViewElementStates.Selected)].Cells[0] != null)
                     {
-                        FindSongLyrics(path);
+                        string filePath =
+                            (string)
+                                lyricsView.Rows[lyricsView.Rows.GetFirstRow(DataGridViewElementStates.Selected)].Cells[0
+                                    ]
+                                    .Value;
+                        string path = Path.Combine(@"D:\Music", filePath + ".mp3");
+                        if (System.IO.File.Exists(path))
+                        {
+                            FindSongLyrics(path);
+                        }
                     }
                 }));
                 m.MenuItems.Add(new MenuItem("Scan Lyrics on AzLyrics", (o, h) =>
