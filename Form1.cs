@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Awesomium.Core;
+using HtmlAgilityPack;
+using MP3_Auto_Tagger_GUI.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -16,9 +19,6 @@ using System.Web;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using Awesomium.Core;
-using HtmlAgilityPack;
-using MP3_Auto_Tagger_GUI.Properties;
 using TagLib;
 using File = TagLib.File;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
@@ -48,6 +48,7 @@ namespace MP3_Auto_Tagger_GUI
 
         public List<WebView> browserTabs = new List<WebView>();
 
+        private FileSystemWatcher monitor;
         public Form1()
         {
             InitializeComponent();
@@ -57,6 +58,11 @@ namespace MP3_Auto_Tagger_GUI
             Top = (Screen.PrimaryScreen.Bounds.Height - Height) / 2;
             Left = (Screen.PrimaryScreen.Bounds.Width - Width) / 2;
             ChangeMonitorPath(GetMusicPath());
+            monitor = new FileSystemWatcher(GetMusicPath(), "*.mp3") { NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName, EnableRaisingEvents = true };
+            monitor.Created += monitor_CreatedOrChanged;
+            monitor.Deleted += monitor_CreatedOrChanged;
+            monitor.Renamed += monitor_CreatedOrChanged;
+
             _songsWithoutLyrics = new List<string>();
         }
 
@@ -97,12 +103,7 @@ namespace MP3_Auto_Tagger_GUI
             });
             _files = Directory.GetFiles(GetMusicPath(), "*.mp3", SearchOption.TopDirectoryOnly);
             notifyThread.Start();
-
             SetStatus("Starting monitor component...");
-            FileSystemWatcher monitor = new FileSystemWatcher(GetMusicPath(), "*.mp3") { EnableRaisingEvents = true };
-            monitor.Created += monitor_CreatedOrChanged;
-            monitor.Deleted += monitor_CreatedOrChanged;
-            monitor.Changed += monitor_CreatedOrChanged;
 
             SetStatus("Preparing music file analysis");
             AnalyseAllFiles();
@@ -1386,7 +1387,9 @@ namespace MP3_Auto_Tagger_GUI
                                                 }
                                             }
                                         }
-                                        Image img = Image.FromFile(tempPath);
+                                        Image img = Properties.Resources.question_sign_on_person_head;
+                                        if (System.IO.File.Exists(tempPath))
+                                            img = Image.FromFile(tempPath);
 
                                         MusicChart Chart = new MusicChart(artist, title, ResizeImage(img, 44, 44), isChecked, _chartDates[both]);
                                         Chart.Size = new Size(_chartSongsPanel.Size.Width - 25, Chart.Height);
@@ -1576,29 +1579,39 @@ namespace MP3_Auto_Tagger_GUI
                 {
                     Invoke(new Action(() => SetSubstatus(Path.GetFileNameWithoutExtension(filePath))));
                     if (!filePath.Contains(".ini"))
-                        using (File file = File.Create(filePath))
+                    {
+                        try
                         {
-                            if (!file.Tag.Pictures.Any())
+                            using (File file = File.Create(filePath))
                             {
-                                new Thread(() =>
+                                if (!file.Tag.Pictures.Any())
                                 {
-                                    try
+                                    new Thread(() =>
                                     {
-                                        Do(() => ProcessArtwork(filePath), TimeSpan.FromSeconds(2));
-                                    }
-                                    catch
-                                    {
-                                        // ignored
-                                    }
-                                })
-                                { IsBackground = true }.Start();
-                            }
+                                        try
+                                        {
+                                            Do(() => ProcessArtwork(filePath), TimeSpan.FromSeconds(2));
+                                        }
+                                        catch
+                                        {
+                                            // ignored
+                                        }
+                                    })
+                                    { IsBackground = true }.Start();
+                                }
 
-                            //if (file.Tag.Lyrics == null || file.Tag.Lyrics.Count() < 5)
-                            //{
-                            //    songsWithoutLyrics.Add(file.Name);
-                            //}
+                                //if (file.Tag.Lyrics == null || file.Tag.Lyrics.Count() < 5)
+                                //{
+                                //    songsWithoutLyrics.Add(file.Name);
+                                //}
+                            }
                         }
+                        catch (Exception ex)
+                        {
+                            if (ex.Message.Contains("audio header not found"))
+                                Console("It seems the file " + System.IO.Path.GetFileNameWithoutExtension(filePath) + " is corrupted. Please fix this soon!", Color.Red);
+                        }
+                    }
                     //string lyrics = RetreiveLyrics(filePath);
                     //if (lyrics != "")
                     //{
@@ -1848,6 +1861,7 @@ namespace MP3_Auto_Tagger_GUI
         {
             try
             {
+                ScanLocalLyrics();
                 #region Part 1: Fixing dat filename
 
                 _files = Directory.GetFiles(GetMusicPath(), "*.mp3", SearchOption.TopDirectoryOnly);
@@ -1934,6 +1948,7 @@ namespace MP3_Auto_Tagger_GUI
         private void ChangeMonitorPath(string pathdir)
         {
             Properties.Settings.Default.folder = pathdir;
+            Properties.Settings.Default.Save();
             lblMonitoringDirectory.Text = pathdir;
         }
 

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Xml.Linq;  
+using System.Xml.Linq;
 using File = System.IO.File;
 
 namespace MP3_Auto_Tagger_GUI
@@ -61,8 +62,8 @@ namespace MP3_Auto_Tagger_GUI
         public int SplitHeifenKey { get; set; }
 
         private static Dictionary<string, string> _dictionaryFileName = new Dictionary<string, string>();
-        
-        private static string _pathChartSongs = Path.Combine(Form1.PathProgramData, "MP3FileNameConfig.xml"); 
+
+        private static string _pathChartSongs = Path.Combine(Form1.PathProgramData, "MP3FileNameConfig.xml");
         private static void LoadDictionary()
         {
             var xElem2 = new XElement("items");
@@ -290,68 +291,43 @@ namespace MP3_Auto_Tagger_GUI
         {
             try
             {
+                string newname = FileName;
                 var replaceList = new Dictionary<string, string>
-                {
-                    {"[", "("},
-                    {"]", ")"},
-                    {"(Official Audio)", ""},
-                    {"(Audio)", ""},
-                    {"OFFICIAL", ""},
-                    {"Official", ""},
-                    {"(Video)", ""},
-                    {"Video)", ""},
-                    {"(video)", ""},
-                    {"video)", ""},
-                    {"(Lyric","" },
-                    { " Featuring ", " (ft. "},
-                    {",)", ")"},
-                    {" FEAT ", " (FEAT "},
-                    {" Feat ", " (FEAT "},
-                    {" Feat. ", " (FEAT "},
-                    {"(Feat.", "(ft."},
-                    {"(FEAT", "(feat"},
-                    {"( Music",""},
-                    {"(feat", "(ft"},
-                    {"FEAT ", "ft"},
-                    {"( )", ""},
-                    {"()", ""},
-                    {"(|", ""},
-                    {"( |", ""},
-                    {"(  )", ""},
-                    {"FT ", "ft. "},
-                    {"Ft ", "ft. "},
-                    {"(Explicit)", ""},
-                    {"ft ", "ft. "},
-                    {" Ft. ", " (ft. "},//[ FT. ,  (ft. ]
-                    {" FT. ", " (ft. "},//[ FT. ,  (ft. ]
-                    {" FT", " (ft"},//[ FT,  (ft]
-                    {"(FT ", "(ft. "},
-                    {" (ft ", " (ft."},
-                    {" (Ft ", "(ft. "}
-                };
+               {
+                   {"[", "("},
+                   {"]", ")"},
+                   {"(Official Audio)", ""},
+                   {"(Audio)", ""},
+                   {"OFFICIAL", ""},
+                   {"Official", ""},
+                   {"(Video)", ""},
+                   {"Video)", ""},
+                   {"(video)", ""},
+                   {"video)", ""},
+                   {"(Lyric","" },
+                   {",)", ")"},
+               };
 
-                while (true)
+                foreach (var item in replaceList)
                 {
-                    var reiterate = false;
-                    foreach (var vari in replaceList)
+                    if (newname.Contains(item.Key))
                     {
-                        if (FileName.ToLower().Contains(vari.Key.ToLower()))
-                        {
-                            reiterate = true;
-                        }
+                        newname.Replace(item.Key, item.Value);
                     }
-                    if (reiterate)
-                        foreach (var replaceItem in replaceList.Where(replaceItem => FileName.ToLower().Contains(replaceItem.Key.ToLower()))
-                            )
-                        {
-                            if (FileName.Contains(replaceItem.Key))
-                                FileName = FileName.Replace(replaceItem.Key, replaceItem.Value);
-                            else
-                                FileName = FileName.Replace(replaceItem.Key.ToLower(), replaceItem.Value);
 
-                        }
-                    if (reiterate) continue;
-                    break;
+                    if (newname.Contains(item.Key.ToLower()))
+                    {
+                        newname.Replace(item.Value.ToLower(), item.Value);
+                    }
+                }
+
+                string matchstring = @"([\s]+\(?fe?a?t(?:uring)?\.?[\s]+)(?!$)";
+                Match match = Regex.Match(FileName, matchstring, RegexOptions.IgnoreCase);
+                if (match.Success)
+                {
+                    if (FileName.Contains(match.Groups[1].Value))
+                        FileName = FileName.Replace(match.Groups[1].Value, " (ft. ");
+
                 }
             }
             catch (Exception ex)
@@ -394,8 +370,9 @@ namespace MP3_Auto_Tagger_GUI
             {
                 int ftIndex = Start.IndexOf("(ft.", StringComparison.Ordinal);
                 string featuringStart = Start.Substring(ftIndex);
-                string featuringFinal = featuringStart.Remove(featuringStart.IndexOf(")", StringComparison.Ordinal));
-                baseArtist = Start.Remove(ftIndex).Trim();
+                string featuringFinal = featuringStart;
+                if (featuringStart.Contains(")"))
+                    featuringFinal = featuringStart.Remove(featuringStart.IndexOf(")", StringComparison.Ordinal)); baseArtist = Start.Remove(ftIndex).Trim();
                 var artists = new List<string>();
                 if (featuringFinal.Contains(","))
                 {
@@ -416,7 +393,9 @@ namespace MP3_Auto_Tagger_GUI
             {
                 int ftIndex = End.IndexOf("(ft.", StringComparison.Ordinal);
                 string featuringEnd = End.Substring(ftIndex);
-                string featuringFinal = featuringEnd.Remove(featuringEnd.IndexOf(")", StringComparison.Ordinal));
+                string featuringFinal = featuringEnd;
+                if (featuringEnd.Contains(")"))
+                    featuringFinal = featuringEnd.Remove(featuringEnd.IndexOf(")", StringComparison.Ordinal));
                 var artists = new List<string>();
                 if (featuringFinal.Contains(","))
                 {
